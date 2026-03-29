@@ -1,0 +1,28 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {},
+      "blocks": {
+        "menu_1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer"
+          }
+        },
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "heading": "About Varkomz",
+            "content": "<p>Qatar's authorized dealer for Tigé, ATX, Hyperlite & HO Sports.</p>"
+          }
+        }
+      },
+      "block_order": ["menu_1", "text_1"]
+    }
+  },
+  "order": ["footer"]
+}

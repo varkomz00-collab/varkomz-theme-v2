@@ -1,0 +1,23 @@
+<article class="article-page page-width">
+  <h1>{{ article.title }}</h1>
+  <div class="article-meta">
+    <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %d, %Y' }}</time>
+    <span>by {{ article.author }}</span>
+  </div>
+  {% if article.image %}
+    <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.image.alt | escape }}" class="article-hero" loading="eager">
+  {% endif %}
+  <div class="article-content rte">
+    {{ article.content }}
+  </div>
+  <div class="article-back">
+    <a href="{{ blog.url }}" class="btn btn-secondary">&larr; Back to {{ blog.title }}</a>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article Page",
+  "settings": []
+}
+{% endschema %}

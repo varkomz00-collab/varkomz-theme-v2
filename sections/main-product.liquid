@@ -1,0 +1,98 @@
+<div class="product-page page-width" data-section-id="{{ section.id }}">
+  <div class="product-grid">
+    <div class="product-media">
+      {% for media in product.media %}
+        <div class="product-media-item{% if forloop.first %} active{% endif %}">
+          {% if media.media_type == 'image' %}
+            <img
+              src="{{ media | image_url: width: 800 }}"
+              alt="{{ media.alt | escape }}"
+              width="{{ media.width }}"
+              height="{{ media.height }}"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            >
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="product-info">
+      {% if section.settings.show_vendor and product.vendor != blank %}
+        <p class="product-vendor">{{ product.vendor }}</p>
+      {% endif %}
+
+      <h1 class="product-title">{{ product.title }}</h1>
+
+      <div class="product-price">
+        {% if product.compare_at_price > product.price %}
+          <s class="product-compare-price">{{ product.compare_at_price | money }}</s>
+        {% endif %}
+        <span class="product-current-price">{{ product.price | money }}</span>
+      </div>
+
+      {% form 'product', product %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+        {% if product.variants.size > 1 %}
+          <div class="product-variants">
+            {% for option in product.options_with_values %}
+              <div class="variant-option">
+                <label>{{ option.name }}</label>
+                <select name="options[{{ option.name }}]" class="variant-select">
+                  {% for value in option.values %}
+                    <option value="{{ value }}" {% if option.selected_value == value %}selected{% endif %}>
+                      {{ value }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.show_quantity %}
+          <div class="product-quantity">
+            <label for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+            <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1">
+          </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary add-to-cart"
+          {% unless product.available %}disabled{% endunless %}>
+          {% if product.available %}
+            {{ 'products.add_to_cart' | t }}
+          {% else %}
+            {{ 'products.sold_out' | t }}
+          {% endif %}
+        </button>
+      {% endform %}
+
+      {% if product.description != blank %}
+        <div class="product-description rte">
+          {{ product.description }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show quantity selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor name",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

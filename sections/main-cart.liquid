@@ -1,0 +1,61 @@
+<div class="cart-page page-width">
+  <h1>{{ 'cart.title' | t }}</h1>
+
+  {% if cart.item_count == 0 %}
+    <p class="cart-empty">{{ 'cart.empty' | t }}</p>
+    <a href="/collections/all" class="btn btn-primary">{{ 'general.continue_shopping' | t }}</a>
+  {% else %}
+    {% form 'cart', cart %}
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart.items %}
+            <tr>
+              <td class="cart-item-info">
+                <a href="{{ item.url }}">
+                  {% if item.image %}
+                    <img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.title | escape }}" width="100" loading="lazy">
+                  {% endif %}
+                  <div>
+                    <span>{{ item.product.title }}</span>
+                    {% if item.variant.title != 'Default Title' %}
+                      <small>{{ item.variant.title }}</small>
+                    {% endif %}
+                  </div>
+                </a>
+              </td>
+              <td>{{ item.price | money }}</td>
+              <td>
+                <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" data-line="{{ forloop.index }}">
+              </td>
+              <td>{{ item.line_price | money }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="cart-footer">
+        <div class="cart-subtotal">
+          <strong>{{ 'cart.subtotal' | t }}:</strong>
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+        <button type="submit" name="update" class="btn btn-secondary">Update cart</button>
+        <button type="submit" name="checkout" class="btn btn-primary">{{ 'cart.checkout' | t }}</button>
+      </div>
+    {% endform %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Cart Page",
+  "settings": []
+}
+{% endschema %}

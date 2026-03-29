@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_quantity": true,
+        "show_vendor": false
+      }
+    },
+    "test_5_extra": {
+      "type": "test-5-product-extra",
+      "settings": {}
+    }
+  },
+  "order": ["main", "test_5_extra"]
+}

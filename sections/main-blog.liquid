@@ -1,0 +1,27 @@
+<div class="blog-page page-width">
+  <h1>{{ blog.title }}</h1>
+  <div class="blog-grid">
+    {% for article in blog.articles %}
+      <article class="blog-card">
+        {% if article.image %}
+          <a href="{{ article.url }}">
+            <img src="{{ article.image | image_url: width: 600 }}" alt="{{ article.image.alt | escape }}" loading="lazy">
+          </a>
+        {% endif %}
+        <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %d, %Y' }}</time>
+        {% if article.excerpt != blank %}
+          <p>{{ article.excerpt }}</p>
+        {% endif %}
+        <a href="{{ article.url }}" class="btn btn-secondary">Read more</a>
+      </article>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog Page",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,37 @@
+<div style="background: #8b5cf6; color: white; padding: 40px; margin: 2rem 0;">
+  <h2 style="text-align: center; font-size: 2rem; margin-bottom: 1rem;">✅ TEST 4: Dynamic Shopify Data</h2>
+
+  <div style="max-width: 800px; margin: 1rem auto; background: rgba(255,255,255,0.15); padding: 20px; border-radius: 8px;">
+    <p><strong>Shop name:</strong> {{ shop.name }}</p>
+    <p><strong>Shop URL:</strong> {{ shop.url }}</p>
+    <p><strong>Currency:</strong> {{ shop.currency }}</p>
+    <p><strong>Cart items:</strong> {{ cart.item_count }}</p>
+  </div>
+
+  {%- assign test_collection = collections.all -%}
+  {% if test_collection and test_collection.products.size > 0 %}
+    <h3 style="text-align: center; margin: 1.5rem 0 1rem;">First 4 products from your store:</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; max-width: 800px; margin: 0 auto;">
+      {% for product in test_collection.products limit: 4 %}
+        <div style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 8px; text-align: center;">
+          {% if product.featured_image %}
+            <img src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ product.title | escape }}" style="border-radius: 4px; margin-bottom: 0.5rem; width:100%;" loading="lazy">
+          {% endif %}
+          <p style="font-weight: 600; font-size: 0.875rem;">{{ product.title }}</p>
+          <p>{{ product.price | money }}</p>
+        </div>
+      {% endfor %}
+    </div>
+    <p style="text-align: center; margin-top: 1rem;"><small>If you see shop info and real products above, Shopify data binding works.</small></p>
+  {% else %}
+    <p style="text-align: center;">No products found — add products to your store to see them here.</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Test 4 - Dynamic Data",
+  "settings": [],
+  "presets": [{ "name": "Test 4 - Dynamic Data" }]
+}
+{% endschema %}

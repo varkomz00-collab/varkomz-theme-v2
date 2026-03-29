@@ -1,0 +1,32 @@
+<div class="search-page page-width">
+  <h1>Search</h1>
+  {% form 'get', routes.search_url %}
+    <div class="search-form">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search our store..." class="search-input" aria-label="Search">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+    <input type="hidden" name="type" value="product">
+  {% endform %}
+
+  {% if search.performed %}
+    {% if search.results_count > 0 %}
+      <p>{{ search.results_count }} result{{ search.results_count | pluralize: '', 's' }} for <strong>{{ search.terms | escape }}</strong></p>
+      <div class="product-grid grid--4-col">
+        {% for result in search.results %}
+          {% if result.object_type == 'product' %}
+            {% render 'product-card', product: result %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No results for <strong>{{ search.terms | escape }}</strong>. Try a different search term.</p>
+    {% endif %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Search Page",
+  "settings": []
+}
+{% endschema %}

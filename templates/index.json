@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "main_hero": {
+      "type": "hero-banner",
+      "settings": {
+        "pre_heading": "QATAR'S AUTHORIZED TIGÉ, ATX, HYPERLITE & HO SPORTS DEALER",
+        "heading": "Your Wave. Your Way.",
+        "subheading": "Premium boats, pro-grade gear, and waterfront apparel — hand-picked for Gulf riders. Free worldwide shipping from Doha.",
+        "button_label": "Shop Best Sellers",
+        "button_link": "/collections/all",
+        "button_label_2": "Build Your Dream Boat",
+        "button_link_2": "/pages/contact",
+        "bg_color": "#0a1628"
+      }
+    },
+    "featured_collection_section": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Featured Products",
+        "collection": "all",
+        "products_to_show": 8,
+        "show_view_all": true
+      }
+    },
+    "test_1_static": {
+      "type": "test-1-static",
+      "settings": {}
+    },
+    "test_2_settings": {
+      "type": "test-2-settings",
+      "settings": {
+        "heading": "CUSTOM HEADING FROM JSON",
+        "message": "This text was set in the JSON template, not the Shopify customizer. Settings wiring confirmed.",
+        "bg_color": "#2563eb",
+        "text_color": "#ffffff"
+      }
+    },
+    "test_3_blocks": {
+      "type": "test-3-blocks",
+      "settings": {},
+      "blocks": {
+        "card_a": {
+          "type": "card",
+          "settings": { "title": "Card A — Authorized Dealer", "description": "Official Tigé & ATX dealer in Qatar" }
+        },
+        "card_b": {
+          "type": "card",
+          "settings": { "title": "Card B — Free Shipping", "description": "Free worldwide shipping from Doha" }
+        },
+        "card_c": {
+          "type": "card",
+          "settings": { "title": "Card C — Expert Support", "description": "WhatsApp us: +974 5183 5555" }
+        }
+      },
+      "block_order": ["card_a", "card_b", "card_c"]
+    },
+    "test_4_dynamic": {
+      "type": "test-4-dynamic",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main_hero",
+    "featured_collection_section",
+    "test_1_static",
+    "test_2_settings",
+    "test_3_blocks",
+    "test_4_dynamic"
+  ]
+}
