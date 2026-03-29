@@ -1,0 +1,53 @@
+<div class="customer-page page-width">
+  <h1>Login</h1>
+
+  {% form 'customer_login' %}
+    {{ form.errors | default_errors }}
+
+    <div class="form-group">
+      <label for="CustomerEmail">Email</label>
+      <input type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" autocapitalize="off" required>
+    </div>
+
+    <div class="form-group">
+      <label for="CustomerPassword">Password</label>
+      <input type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Sign In</button>
+
+    <p class="form-link"><a href="#recover">Forgot your password?</a></p>
+  {% endform %}
+
+  <div id="recover" style="display:none;">
+    <h2>Reset your password</h2>
+    {% form 'recover_customer_password' %}
+      {{ form.errors | default_errors }}
+      {% if form.posted_successfully? %}
+        <p>We've sent you an email with a link to update your password.</p>
+      {% endif %}
+
+      <div class="form-group">
+        <label for="RecoverEmail">Email</label>
+        <input type="email" name="email" id="RecoverEmail" autocomplete="email" autocapitalize="off" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <p class="form-link"><a href="#" onclick="document.getElementById('recover').style.display='none';return false;">Cancel</a></p>
+    {% endform %}
+  </div>
+
+  <script>
+    if (window.location.hash === '#recover') {
+      document.getElementById('recover').style.display = 'block';
+    }
+    document.querySelectorAll('a[href="#recover"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('recover').style.display = 'block';
+      });
+    });
+  </script>
+
+  <p class="form-link">Don't have an account? <a href="{{ routes.account_register_url }}">Create account</a></p>
+</div>

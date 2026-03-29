@@ -1,0 +1,57 @@
+<div class="customer-page page-width">
+  <h1>Order {{ order.name }}</h1>
+  <p>Placed on {{ order.created_at | date: '%B %d, %Y' }}</p>
+
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>SKU</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line_item in order.line_items %}
+        <tr>
+          <td>{{ line_item.title }}</td>
+          <td>{{ line_item.sku }}</td>
+          <td>{{ line_item.final_price | money }}</td>
+          <td>{{ line_item.quantity }}</td>
+          <td>{{ line_item.final_line_price | money }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="max-width:360px;margin-top:2rem;">
+    <div class="cart-drawer-total" style="margin-bottom:0.5rem;">
+      <span>Subtotal</span>
+      <span>{{ order.line_items_subtotal_price | money }}</span>
+    </div>
+    {% for discount in order.discounts %}
+      <div class="cart-drawer-total" style="margin-bottom:0.5rem;">
+        <span>Discount ({{ discount.code }})</span>
+        <span>-{{ discount.savings | money }}</span>
+      </div>
+    {% endfor %}
+    {% for shipping_method in order.shipping_methods %}
+      <div class="cart-drawer-total" style="margin-bottom:0.5rem;">
+        <span>Shipping ({{ shipping_method.title }})</span>
+        <span>{{ shipping_method.price | money }}</span>
+      </div>
+    {% endfor %}
+    <div class="cart-drawer-total" style="font-size:1.25rem;">
+      <span>Total</span>
+      <span>{{ order.total_price | money }}</span>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem;">
+    <h2>Shipping Address</h2>
+    <p>{{ order.shipping_address | format_address }}</p>
+  </div>
+
+  <a href="{{ routes.account_url }}" class="btn btn-secondary" style="margin-top:2rem;display:inline-block;">&larr; Back to account</a>
+</div>

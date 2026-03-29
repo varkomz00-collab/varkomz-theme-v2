@@ -4,6 +4,13 @@
 {%- endcomment -%}
 
 <div class="product-card">
+  {%- if product.compare_at_price > product.price -%}
+    <span class="product-badge product-badge--sale">Sale</span>
+  {%- elsif product.available == false -%}
+    <span class="product-badge product-badge--soldout">Sold Out</span>
+  {%- elsif product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_quantity <= 5 and product.selected_or_first_available_variant.inventory_quantity > 0 -%}
+    <span class="product-badge product-badge--low">Only {{ product.selected_or_first_available_variant.inventory_quantity }} left</span>
+  {%- endif -%}
   <a href="{{ product.url }}" class="product-card-link">
     {% if product.featured_image %}
       <img

@@ -24,6 +24,11 @@
 
       <h1 class="product-title">{{ product.title }}</h1>
 
+      {%- assign current_variant = product.selected_or_first_available_variant -%}
+      {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity <= 5 and current_variant.inventory_quantity > 0 -%}
+        <p class="product-low-stock">Only {{ current_variant.inventory_quantity }} left in stock</p>
+      {%- endif -%}
+
       <div class="product-price">
         {% if product.compare_at_price > product.price %}
           <s class="product-compare-price">{{ product.compare_at_price | money }}</s>

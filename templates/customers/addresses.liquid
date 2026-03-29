@@ -1,0 +1,72 @@
+<div class="customer-page page-width">
+  <h1>Your Addresses</h1>
+
+  <a href="#" onclick="document.getElementById('AddAddressForm').style.display='block';return false;" class="btn btn-primary" style="margin-bottom:2rem;display:inline-block;">Add a new address</a>
+
+  <div id="AddAddressForm" style="display:none;margin-bottom:2rem;padding:2rem;background:var(--vz-light-gray);border-radius:var(--vz-radius);">
+    <h2>Add new address</h2>
+    {% form 'customer_address', customer.new_address %}
+      <div class="form-group">
+        <label for="AddressFirstName">First name</label>
+        <input type="text" name="address[first_name]" id="AddressFirstName" autocomplete="given-name">
+      </div>
+      <div class="form-group">
+        <label for="AddressLastName">Last name</label>
+        <input type="text" name="address[last_name]" id="AddressLastName" autocomplete="family-name">
+      </div>
+      <div class="form-group">
+        <label for="AddressCompany">Company</label>
+        <input type="text" name="address[company]" id="AddressCompany" autocomplete="organization">
+      </div>
+      <div class="form-group">
+        <label for="AddressAddress1">Address</label>
+        <input type="text" name="address[address1]" id="AddressAddress1" autocomplete="address-line1">
+      </div>
+      <div class="form-group">
+        <label for="AddressAddress2">Apartment, suite, etc.</label>
+        <input type="text" name="address[address2]" id="AddressAddress2" autocomplete="address-line2">
+      </div>
+      <div class="form-group">
+        <label for="AddressCity">City</label>
+        <input type="text" name="address[city]" id="AddressCity" autocomplete="address-level2">
+      </div>
+      <div class="form-group">
+        <label for="AddressCountry">Country</label>
+        <select name="address[country]" id="AddressCountry" data-default="{{ form.country }}">{{ all_country_option_tags }}</select>
+      </div>
+      <div class="form-group">
+        <label for="AddressZip">Postal/ZIP code</label>
+        <input type="text" name="address[zip]" id="AddressZip" autocomplete="postal-code">
+      </div>
+      <div class="form-group">
+        <label for="AddressPhone">Phone</label>
+        <input type="tel" name="address[phone]" id="AddressPhone" autocomplete="tel">
+      </div>
+      <div class="form-group">
+        {{ form.set_as_default_checkbox }}
+        <label for="address_default_address_new" style="display:inline;">Set as default address</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Add address</button>
+      <a href="#" onclick="document.getElementById('AddAddressForm').style.display='none';return false;" class="btn btn-secondary">Cancel</a>
+    {% endform %}
+  </div>
+
+  {% for address in customer.addresses %}
+    <div style="margin-bottom:1.5rem;padding:1.5rem;border:1px solid var(--vz-border);border-radius:var(--vz-radius);">
+      <p>
+        {{ address.first_name }} {{ address.last_name }}<br>
+        {% if address.company != blank %}{{ address.company }}<br>{% endif %}
+        {{ address.street }}<br>
+        {{ address.city }}, {{ address.province_code }} {{ address.zip }}<br>
+        {{ address.country }}
+      </p>
+      {% if address == customer.default_address %}
+        <p><strong>Default address</strong></p>
+      {% endif %}
+      <a href="{{ address.url }}/edit" class="btn btn-secondary btn-sm">Edit</a>
+      <a href="{{ address.url }}" data-confirm="Are you sure?" data-method="delete" class="btn btn-secondary btn-sm">Delete</a>
+    </div>
+  {% endfor %}
+
+  <a href="{{ routes.account_url }}" class="btn btn-secondary">&larr; Back to account</a>
+</div>

@@ -1,0 +1,43 @@
+<div class="customer-page page-width">
+  <h1>My Account</h1>
+  <p>{{ customer.email }}</p>
+  <a href="{{ routes.account_logout_url }}" class="btn btn-secondary">Log out</a>
+
+  <h2>Order History</h2>
+  {% if customer.orders.size > 0 %}
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in customer.orders %}
+          <tr>
+            <td><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+            <td>{{ order.created_at | date: '%B %d, %Y' }}</td>
+            <td>{{ order.financial_status_label }}</td>
+            <td>{{ order.total_price | money }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>You haven't placed any orders yet.</p>
+  {% endif %}
+
+  <h2>Account Details</h2>
+  {% if customer.default_address %}
+    <p>
+      {{ customer.default_address.first_name }} {{ customer.default_address.last_name }}<br>
+      {% if customer.default_address.company != blank %}{{ customer.default_address.company }}<br>{% endif %}
+      {{ customer.default_address.street }}<br>
+      {{ customer.default_address.city }}, {{ customer.default_address.province_code }} {{ customer.default_address.zip }}<br>
+      {{ customer.default_address.country }}
+    </p>
+  {% endif %}
+  <a href="{{ routes.account_addresses_url }}" class="btn btn-secondary">View addresses</a>
+</div>
