@@ -106,8 +106,8 @@
   #hero-video-{{ section.id }} {
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: {% if text_alignment == 'bottom-left' %}flex-end{% else %}center{% endif %};
+    justify-content: {% if text_alignment == 'bottom-left' %}flex-start{% else %}center{% endif %};
     height: var(--hero-height);
     min-height: 400px;
     overflow: hidden;
@@ -158,9 +158,10 @@
   #hero-video-{{ section.id }} .hero-video__content {
     position: relative;
     z-index: 3;
-    text-align: var(--text-align);
-    padding: 40px 20px;
-    max-width: 900px;
+    text-align: {% if text_alignment == 'bottom-left' %}left{% else %}var(--text-align){% endif %};
+    padding: {% if text_alignment == 'bottom-left' %}0 20px 60px{% else %}40px 20px{% endif %};
+    max-width: {% if text_alignment == 'bottom-left' %}100%{% else %}900px{% endif %};
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -187,14 +188,14 @@
     opacity: 0.9;
     margin: 0 0 32px;
     max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    {% unless text_alignment == 'bottom-left' %}margin-left: auto;
+    margin-right: auto;{% endunless %}
   }
 
   #hero-video-{{ section.id }} .hero-video__actions {
     display: flex;
     gap: 16px;
-    justify-content: {{ text_alignment }};
+    justify-content: var(--text-align);
     flex-wrap: wrap;
     margin-bottom: 24px;
   }
@@ -354,7 +355,8 @@
       "options": [
         { "value": "left", "label": "Left" },
         { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        { "value": "right", "label": "Right" },
+        { "value": "bottom-left", "label": "Bottom left" }
       ],
       "default": "center"
     }

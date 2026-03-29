@@ -67,6 +67,10 @@
         </button>
       {% endform %}
 
+      <script type="application/json" id="ProductVariants-{{ section.id }}">
+        {{ product.variants | json }}
+      </script>
+
       {% if product.description != blank %}
         <div class="product-description rte">
           {{ product.description }}

@@ -1,0 +1,24 @@
+<!-- Cart Drawer Overlay -->
+<div class="cart-drawer-overlay" aria-hidden="true"></div>
+
+<!-- Cart Drawer -->
+<div class="cart-drawer" role="dialog" aria-label="Shopping cart" aria-hidden="true">
+  <div class="cart-drawer-header">
+    <h3>Your Cart</h3>
+    <button class="cart-drawer-close" aria-label="Close cart">&times;</button>
+  </div>
+
+  <div class="cart-drawer-items">
+    <p style="text-align:center;color:var(--vz-gray);padding:2rem 0;">Your cart is empty</p>
+  </div>
+
+  <div class="cart-drawer-footer">
+    <div class="cart-drawer-total">
+      <span>Total</span>
+      <span class="cart-drawer-total-price">{{ cart.total_price | money }}</span>
+    </div>
+    <a href="/checkout" class="btn btn-primary cart-drawer-checkout" style="width:100%;text-align:center;display:{% if cart.item_count > 0 %}block{% else %}none{% endif %};">
+      Checkout
+    </a>
+  </div>
+</div>

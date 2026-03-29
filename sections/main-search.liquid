@@ -10,7 +10,7 @@
 
   {% if search.performed %}
     {% if search.results_count > 0 %}
-      <p>{{ search.results_count }} result{{ search.results_count | pluralize: '', 's' }} for <strong>{{ search.terms | escape }}</strong></p>
+      <p>{{ search.results_count }} {% if search.results_count == 1 %}result{% else %}results{% endif %} for <strong>{{ search.terms | escape }}</strong></p>
       <div class="product-grid grid--4-col">
         {% for result in search.results %}
           {% if result.object_type == 'product' %}
