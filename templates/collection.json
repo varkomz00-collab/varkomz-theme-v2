@@ -1,5 +1,15 @@
 {
   "sections": {
+    "collection_header": {
+      "type": "collection-header",
+      "settings": {}
+    },
+    "collections_carousel": {
+      "type": "collections-carousel",
+      "settings": {
+        "heading": "BROWSE COLLECTIONS"
+      }
+    },
     "main": {
       "type": "main-collection",
       "settings": {
@@ -8,5 +18,5 @@
       }
     }
   },
-  "order": ["main"]
+  "order": ["collection_header", "collections_carousel", "main"]
 }

@@ -1,0 +1,153 @@
+<section class="brand-showcase-section" id="BrandShowcase-{{ section.id }}">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="brand-showcase__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="brand-showcase__grid">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link | default: '#' }}" class="brand-showcase__item" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            <img
+              src="{{ block.settings.image | image_url: width: 300 }}"
+              alt="{{ block.settings.name | escape }}"
+              width="200"
+              height="80"
+              loading="lazy"
+              class="brand-showcase__logo"
+            >
+          {% else %}
+            <span class="brand-showcase__name">{{ block.settings.name }}</span>
+          {% endif %}
+          {% if block.settings.tagline != blank %}
+            <p class="brand-showcase__tagline">{{ block.settings.tagline }}</p>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .brand-showcase-section {
+    padding: 4rem 0;
+  }
+  .brand-showcase__heading {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--vz-black);
+    margin-bottom: 2.5rem;
+  }
+  .brand-showcase__grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+  .brand-showcase__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--vz-transition);
+  }
+  .brand-showcase__item:hover {
+    transform: scale(1.05);
+  }
+  .brand-showcase__logo {
+    max-width: 200px;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: filter var(--vz-transition), opacity var(--vz-transition);
+  }
+  .brand-showcase__item:hover .brand-showcase__logo {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+  .brand-showcase__name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--vz-gray);
+    transition: color var(--vz-transition);
+  }
+  .brand-showcase__item:hover .brand-showcase__name {
+    color: var(--vz-black);
+  }
+  .brand-showcase__tagline {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--vz-gray);
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 749px) {
+    .brand-showcase__grid { gap: 2rem; }
+    .brand-showcase__logo { max-width: 140px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Brand Showcase",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Official Brand Partners"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Brand logo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Brand name",
+          "default": "Brand Name"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Showcase",
+      "blocks": [
+        { "type": "brand", "settings": { "name": "Tigé Boats", "tagline": "BUILT FOR THE GULF", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "name": "ATX Surf Boats", "tagline": "PERFORMANCE MEETS STYLE", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "name": "Hyperlite", "tagline": "PRO-GRADE GEAR", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "name": "HO Sports", "tagline": "RIDE WITH CONFIDENCE", "link": "/collections/all" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

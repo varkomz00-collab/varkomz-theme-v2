@@ -1,0 +1,94 @@
+{%- if collection -%}
+<section class="collection-header" id="CollectionHeader-{{ section.id }}">
+  {% if collection.image %}
+    <div class="collection-header__banner">
+      <img
+        src="{{ collection.image | image_url: width: 1400 }}"
+        alt="{{ collection.title | escape }}"
+        width="1400"
+        height="400"
+        loading="eager"
+        class="collection-header__image"
+      >
+      <div class="collection-header__overlay">
+        <div class="page-width">
+          <h1 class="collection-header__title">{{ collection.title }}</h1>
+          {% if collection.description != blank %}
+            <div class="collection-header__description rte">{{ collection.description }}</div>
+          {% endif %}
+          <p class="collection-header__count">Showing {{ collection.products_count }} products</p>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="collection-header__simple page-width">
+      <h1 class="collection-header__title">{{ collection.title }}</h1>
+      {% if collection.description != blank %}
+        <div class="collection-header__description rte">{{ collection.description }}</div>
+      {% endif %}
+      <p class="collection-header__count">Showing {{ collection.products_count }} products</p>
+    </div>
+  {% endif %}
+</section>
+{%- endif -%}
+
+<style>
+  .collection-header__banner {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+  }
+  .collection-header__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .collection-header__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 30%, rgba(0,0,0,0.6));
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2rem;
+    color: var(--vz-white);
+  }
+  .collection-header__simple {
+    padding: 3rem 0 1.5rem;
+    text-align: center;
+  }
+  .collection-header__title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .collection-header__description {
+    font-size: 1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+  .collection-header__simple .collection-header__description {
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--vz-gray);
+  }
+  .collection-header__count {
+    font-size: 0.8125rem;
+    opacity: 0.7;
+    margin: 0;
+  }
+  @media (max-width: 749px) {
+    .collection-header__banner { height: 200px; }
+    .collection-header__title { font-size: 1.75rem; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Header",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

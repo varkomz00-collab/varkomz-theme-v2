@@ -1,0 +1,132 @@
+<section class="newsletter-section" id="NewsletterSection-{{ section.id }}">
+  <div class="page-width">
+    <div class="newsletter-section__inner">
+      {% if section.settings.heading != blank %}
+        <h2 class="newsletter-section__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subtitle != blank %}
+        <p class="newsletter-section__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+
+      {% form 'customer', id: 'NewsletterForm' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        {% if form.posted_successfully? %}
+          <p class="newsletter-section__success">Welcome aboard! Check your inbox.</p>
+        {% else %}
+          <div class="newsletter-section__form-row">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="Enter your email"
+              required
+              class="newsletter-section__input"
+              aria-label="Email address"
+            >
+            <button type="submit" class="btn btn-primary newsletter-section__btn">Subscribe</button>
+          </div>
+          {% if form.errors %}
+            <p class="newsletter-section__error">{{ form.errors.messages['email'] }}</p>
+          {% endif %}
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .newsletter-section {
+    padding: 4rem 0;
+    background: var(--vz-black);
+    color: var(--vz-white);
+  }
+  .newsletter-section__inner {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .newsletter-section__heading {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .newsletter-section__subtitle {
+    font-size: 1.0625rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+  .newsletter-section__form-row {
+    display: flex;
+    gap: 12px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .newsletter-section__input {
+    flex: 1;
+    padding: 14px 20px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 980px;
+    background: rgba(255,255,255,0.1);
+    color: var(--vz-white);
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--vz-transition);
+  }
+  .newsletter-section__input::placeholder {
+    color: rgba(255,255,255,0.5);
+  }
+  .newsletter-section__input:focus {
+    border-color: var(--vz-accent);
+  }
+  .newsletter-section__btn {
+    white-space: nowrap;
+    border-radius: 980px;
+    padding: 14px 28px;
+  }
+  .newsletter-section__success {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--vz-green);
+  }
+  .newsletter-section__error {
+    font-size: 0.8125rem;
+    color: var(--vz-sale);
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 749px) {
+    .newsletter-section__form-row {
+      flex-direction: column;
+    }
+    .newsletter-section__btn {
+      width: 100%;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Newsletter Section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join the Crew"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Get exclusive drops, deals, and Gulf riding content."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Section"
+    }
+  ]
+}
+{% endschema %}

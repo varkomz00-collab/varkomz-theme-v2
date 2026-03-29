@@ -1,0 +1,142 @@
+<section class="trust-badges-section" id="TrustBadges-{{ section.id }}">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="trust-badges__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="trust-badges__grid">
+      {% for block in section.blocks %}
+        <div class="trust-badge" {{ block.shopify_attributes }}>
+          <div class="trust-badge__icon">
+            {% case block.settings.icon %}
+              {% when 'shield' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              {% when 'truck' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              {% when 'refresh' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              {% when 'chat' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              {% else %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            {% endcase %}
+          </div>
+          <h3 class="trust-badge__title">{{ block.settings.title }}</h3>
+          <p class="trust-badge__text">{{ block.settings.text }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust-badges-section {
+    padding: 4rem 0;
+    background: var(--vz-light-gray);
+  }
+  .trust-badges__heading {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--vz-black);
+    margin-bottom: 2.5rem;
+  }
+  .trust-badges__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .trust-badge {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: var(--vz-white);
+    border-radius: var(--vz-radius);
+    border: 1px solid var(--vz-border);
+  }
+  .trust-badge__icon {
+    color: var(--vz-accent);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+  .trust-badge__title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--vz-black);
+    margin-bottom: 0.5rem;
+  }
+  .trust-badge__text {
+    font-size: 0.875rem;
+    color: var(--vz-gray);
+    line-height: 1.5;
+    margin: 0;
+  }
+  @media (max-width: 989px) {
+    .trust-badges__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 749px) {
+    .trust-badges__grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .trust-badge { padding: 1.5rem 1rem; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Riders Choose Varkomz"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Trust Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shield", "label": "Shield (Authorized)" },
+            { "value": "truck", "label": "Truck (Shipping)" },
+            { "value": "refresh", "label": "Refresh (Returns)" },
+            { "value": "chat", "label": "Chat (Support)" },
+            { "value": "check", "label": "Checkmark" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Authorized Dealer"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "Official dealer for Tigé, ATX, Hyperlite & HO Sports."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Badges",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "shield", "title": "Authorized Dealer", "text": "Official dealer for Tigé, ATX, Hyperlite & HO Sports." } },
+        { "type": "badge", "settings": { "icon": "truck", "title": "Free GCC Shipping", "text": "Same-day dispatch from Doha. 3 days GCC, 7 days worldwide." } },
+        { "type": "badge", "settings": { "icon": "refresh", "title": "14-Day Returns", "text": "Full refund on unused items. No questions, no hassle." } },
+        { "type": "badge", "settings": { "icon": "chat", "title": "WhatsApp Support", "text": "Real experts, not chatbots. Response in under 2 hours." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

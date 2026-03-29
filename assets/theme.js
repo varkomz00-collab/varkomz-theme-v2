@@ -379,6 +379,84 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
 
 
+  // === COLLECTIONS CAROUSEL ===
+  (function() {
+    document.querySelectorAll('.carousel-track').forEach(function(track) {
+      var wrapper = track.closest('.carousel-container');
+      if (!wrapper) return;
+
+      var prevBtn = wrapper.querySelector('.carousel-arrow--prev');
+      var nextBtn = wrapper.querySelector('.carousel-arrow--next');
+      var dotsContainer = wrapper.parentElement.querySelector('.carousel-dots');
+      var cards = Array.from(track.children);
+      if (cards.length === 0) return;
+
+      // Show arrows if content overflows
+      function checkOverflow() {
+        var overflows = track.scrollWidth > track.clientWidth;
+        if (prevBtn) prevBtn.style.display = overflows ? 'flex' : 'none';
+        if (nextBtn) nextBtn.style.display = overflows ? 'flex' : 'none';
+      }
+      checkOverflow();
+      window.addEventListener('resize', checkOverflow);
+
+      // Arrow navigation
+      function scrollAmount() { return track.clientWidth * 0.8; }
+      if (prevBtn) prevBtn.addEventListener('click', function() { track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }); });
+      if (nextBtn) nextBtn.addEventListener('click', function() { track.scrollBy({ left: scrollAmount(), behavior: 'smooth' }); });
+
+      // Auto-advance every 5 seconds
+      var autoplayInterval = setInterval(function() {
+        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
+          track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+        }
+      }, 5000);
+
+      // Pause on hover/touch
+      track.addEventListener('mouseenter', function() { clearInterval(autoplayInterval); });
+      track.addEventListener('mouseleave', function() {
+        autoplayInterval = setInterval(function() {
+          if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+          }
+        }, 5000);
+      });
+      track.addEventListener('touchstart', function() { clearInterval(autoplayInterval); }, { passive: true });
+
+      // Build dots
+      if (dotsContainer && cards.length > 0) {
+        var cardWidth = cards[0].offsetWidth + 12;
+        var visibleCards = Math.round(track.clientWidth / cardWidth) || 1;
+        var dotCount = Math.ceil(cards.length / visibleCards);
+        for (var i = 0; i < dotCount; i++) {
+          var dot = document.createElement('button');
+          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+          (function(idx) {
+            dot.addEventListener('click', function() {
+              track.scrollTo({ left: idx * track.clientWidth, behavior: 'smooth' });
+            });
+          })(i);
+          dotsContainer.appendChild(dot);
+        }
+
+        // Update active dot on scroll
+        track.addEventListener('scroll', function() {
+          var scrollRatio = track.scrollLeft / (track.scrollWidth - track.clientWidth);
+          var activeDot = Math.round(scrollRatio * (dotCount - 1));
+          dotsContainer.querySelectorAll('.carousel-dot').forEach(function(d, idx) {
+            d.classList.toggle('active', idx === activeDot);
+          });
+        });
+      }
+    });
+  })();
+
+
   // === STICKY ADD-TO-CART BAR (Mobile) ===
   (function() {
     var stickyBar = document.getElementById('StickyAtcBar');

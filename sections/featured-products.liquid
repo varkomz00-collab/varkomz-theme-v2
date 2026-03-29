@@ -1,0 +1,83 @@
+{%- assign collection_handle = section.settings.collection | default: 'all' -%}
+{%- assign col = collections[collection_handle] -%}
+{%- assign limit = section.settings.products_to_show | default: 8 -%}
+
+<section class="featured-products-section" id="FeaturedProducts-{{ section.id }}">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="featured-products__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="product-grid grid--4-col">
+      {%- for product in col.products limit: limit -%}
+        {% render 'product-card', product: product %}
+      {%- else -%}
+        <p class="empty-state">No products found. Add products to your "{{ collection_handle }}" collection.</p>
+      {%- endfor -%}
+    </div>
+
+    {% if section.settings.show_view_all and col.products.size > limit %}
+      <div class="featured-products__footer">
+        <a href="{{ col.url }}" class="btn btn-outline">View All</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .featured-products-section {
+    padding: 4rem 0;
+  }
+  .featured-products__heading {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--vz-black);
+    margin-bottom: 2.5rem;
+  }
+  .featured-products__footer {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Gulf Riders Are Buying"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' button",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}
