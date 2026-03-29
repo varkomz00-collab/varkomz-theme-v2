@@ -1,0 +1,229 @@
+{%- liquid
+  assign layout = section.settings.layout | default: 'image_left'
+  assign image_width = section.settings.image_width | default: 50
+  assign text_width = 100 | minus: image_width
+-%}
+
+<section
+  id="text-and-image-{{ section.id }}"
+  class="text-and-image"
+  style="--image-width: {{ image_width }}%; --text-width: {{ text_width }}%;"
+>
+  <div class="text-and-image__wrapper page-width">
+    <div class="text-and-image__grid text-and-image__grid--{{ layout }}">
+      <div class="text-and-image__image-col">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1200 }}"
+            alt="{{ section.settings.title | escape }}"
+            width="1200"
+            height="{{ 1200 | divided_by: section.settings.image.aspect_ratio | round }}"
+            loading="lazy"
+            class="text-and-image__image"
+          >
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'text-and-image__placeholder' }}
+        {%- endif -%}
+      </div>
+
+      <div class="text-and-image__text-col">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="text-and-image__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="text-and-image__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="text-and-image__body rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <a href="{{ section.settings.button_link }}" class="text-and-image__btn">
+            {{ section.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #text-and-image-{{ section.id }} {
+    padding: 80px 0;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__grid {
+    display: grid;
+    grid-template-columns: var(--image-width) var(--text-width);
+    gap: 48px;
+    align-items: center;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__grid--image_right {
+    grid-template-columns: var(--text-width) var(--image-width);
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__grid--image_right .text-and-image__image-col {
+    order: 2;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__grid--image_right .text-and-image__text-col {
+    order: 1;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__image {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    display: block;
+    object-fit: cover;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__placeholder {
+    width: 100%;
+    height: 400px;
+    background: #f5f5f7;
+    border-radius: 14px;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #0d4f8b;
+    margin: 0 0 12px;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__title {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #6e6e73;
+    margin: 0 0 28px;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__body p {
+    margin: 0 0 16px;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__btn {
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 999px;
+    background: #0a1628;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  #text-and-image-{{ section.id }} .text-and-image__btn:hover {
+    background: #1a3a5c;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    #text-and-image-{{ section.id }} {
+      padding: 48px 0;
+    }
+    #text-and-image-{{ section.id }} .text-and-image__grid,
+    #text-and-image-{{ section.id }} .text-and-image__grid--image_right {
+      grid-template-columns: 1fr;
+    }
+    #text-and-image-{{ section.id }} .text-and-image__grid--image_right .text-and-image__image-col {
+      order: 0;
+    }
+    #text-and-image-{{ section.id }} .text-and-image__grid--image_right .text-and-image__text-col {
+      order: 0;
+    }
+    #text-and-image-{{ section.id }} .text-and-image__title {
+      font-size: 28px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Text and Image",
+  "tag": "section",
+  "class": "section-text-and-image",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Crafted with Purpose"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Body text",
+      "default": "<p>We believe in creating products that make a difference. Every detail is considered, every material carefully selected.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "image_left", "label": "Image left" },
+        { "value": "image_right", "label": "Image right" }
+      ],
+      "default": "image_left"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 40,
+      "max": 60,
+      "step": 5,
+      "default": 50,
+      "unit": "%",
+      "label": "Image width"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text and Image"
+    }
+  ]
+}
+{% endschema %}

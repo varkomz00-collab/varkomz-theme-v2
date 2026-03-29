@@ -1,0 +1,195 @@
+<section id="text-columns-{{ section.id }}" class="text-columns">
+  <div class="text-columns__wrapper page-width">
+    {%- if section.settings.title != blank -%}
+      <h2 class="text-columns__heading">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <div class="text-columns__grid">
+      {%- for block in section.blocks -%}
+        <div class="text-columns__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="text-columns__card-link">
+          {%- endif -%}
+
+          {%- if block.settings.enable_image and block.settings.image != blank -%}
+            <div class="text-columns__image-wrapper">
+              <img
+                src="{{ block.settings.image | image_url: width: 400 }}"
+                alt="{{ block.settings.title | escape }}"
+                width="400"
+                height="400"
+                loading="lazy"
+                class="text-columns__image"
+              >
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.title != blank -%}
+            <h3 class="text-columns__card-title">{{ block.settings.title }}</h3>
+          {%- endif -%}
+
+          {%- if block.settings.text != blank -%}
+            <p class="text-columns__card-text">{{ block.settings.text }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #text-columns-{{ section.id }} {
+    padding: 60px 0;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__heading {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 48px;
+    letter-spacing: -0.02em;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__card {
+    background: #f5f5f7;
+    border-radius: 14px;
+    padding: 32px 28px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  #text-columns-{{ section.id }} .text-columns__card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__image-wrapper {
+    margin-bottom: 20px;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__image {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__card-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  #text-columns-{{ section.id }} .text-columns__card-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #6e6e73;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    #text-columns-{{ section.id }} .text-columns__grid {
+      grid-template-columns: 1fr;
+    }
+    #text-columns-{{ section.id }} .text-columns__heading {
+      font-size: 28px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Text Columns",
+  "tag": "section",
+  "class": "section-text-columns",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Why Choose Us"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_image",
+          "label": "Show image",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Describe the value proposition here."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text Columns",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": { "title": "Premium Quality", "text": "Only the finest materials and craftsmanship." }
+        },
+        {
+          "type": "column",
+          "settings": { "title": "Free Shipping", "text": "Complimentary shipping on all orders." }
+        },
+        {
+          "type": "column",
+          "settings": { "title": "Easy Returns", "text": "30-day hassle-free return policy." }
+        },
+        {
+          "type": "column",
+          "settings": { "title": "24/7 Support", "text": "Our team is always here to help." }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

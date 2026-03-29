@@ -2,6 +2,16 @@
   "type": "header",
   "name": "Header group",
   "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "text_1": "Free Worldwide Shipping on All Orders",
+        "text_2": "Authorized Tigé & ATX Dealer — Qatar's Only",
+        "text_3": "WhatsApp Us: +974 5183 5555 — Reply in <2 Hours",
+        "bg_color": "#1d1d1f",
+        "text_color": "#ffffff"
+      }
+    },
     "header": {
       "type": "header",
       "settings": {
@@ -9,5 +19,5 @@
       }
     }
   },
-  "order": ["header"]
+  "order": ["announcement-bar", "header"]
 }

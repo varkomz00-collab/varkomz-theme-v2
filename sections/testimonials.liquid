@@ -1,0 +1,236 @@
+{%- liquid
+  assign bg_color = section.settings.bg_color | default: '#f5f5f7'
+  assign text_color = section.settings.text_color | default: '#1d1d1f'
+-%}
+
+<section
+  id="testimonials-{{ section.id }}"
+  class="testimonials"
+  style="--bg-color: {{ bg_color }}; --text-color: {{ text_color }};"
+>
+  <div class="testimonials__wrapper page-width">
+    {%- if section.settings.title != blank -%}
+      <h2 class="testimonials__heading">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <div class="testimonials__grid">
+      {%- for block in section.blocks -%}
+        <div class="testimonials__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.stars > 0 -%}
+            <div class="testimonials__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+              {%- for i in (1..5) -%}
+                {%- if i <= block.settings.stars -%}
+                  <span class="testimonials__star testimonials__star--filled">&#9733;</span>
+                {%- else -%}
+                  <span class="testimonials__star">&#9733;</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.text != blank -%}
+            <blockquote class="testimonials__quote">
+              <p>{{ block.settings.text }}</p>
+            </blockquote>
+          {%- endif -%}
+
+          <div class="testimonials__author-wrap">
+            {%- if block.settings.author != blank -%}
+              <p class="testimonials__author">{{ block.settings.author }}</p>
+            {%- endif -%}
+            {%- if block.settings.author_info != blank -%}
+              <p class="testimonials__author-info">{{ block.settings.author_info }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #testimonials-{{ section.id }} {
+    background: var(--bg-color);
+    color: var(--text-color);
+    padding: 60px 0;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__heading {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 48px;
+    letter-spacing: -0.02em;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__stars {
+    display: flex;
+    gap: 2px;
+    font-size: 18px;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__star {
+    color: #d1d1d6;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__star--filled {
+    color: #f5a623;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__quote {
+    margin: 0;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.65;
+    color: #3a3a3c;
+    flex-grow: 1;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__quote p {
+    margin: 0;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__author-wrap {
+    border-top: 1px solid #e5e5ea;
+    padding-top: 16px;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__author {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 2px;
+  }
+
+  #testimonials-{{ section.id }} .testimonials__author-info {
+    font-size: 13px;
+    color: #8e8e93;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    #testimonials-{{ section.id }} .testimonials__grid {
+      grid-template-columns: 1fr;
+    }
+    #testimonials-{{ section.id }} .testimonials__heading {
+      font-size: 28px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section-testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f5f5f7"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1d1d1f"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Star rating"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Quote",
+          "default": "This product completely exceeded my expectations. The quality is outstanding."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author name",
+          "default": "Jane D."
+        },
+        {
+          "type": "text",
+          "id": "author_info",
+          "label": "Author info",
+          "default": "Verified Buyer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Absolutely love the quality. Will be ordering again!",
+            "author": "Sarah M.",
+            "author_info": "Verified Buyer"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Fast shipping and the product looks even better in person.",
+            "author": "James K.",
+            "author_info": "Repeat Customer"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 4,
+            "text": "Great value for the price. Customer service was very helpful.",
+            "author": "Maria L.",
+            "author_info": "Verified Buyer"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,168 @@
+{%- liquid
+  assign logo_opacity = section.settings.opacity | default: 60
+  assign opacity_decimal = logo_opacity | divided_by: 100.0
+-%}
+
+<section id="logo-list-{{ section.id }}" class="logo-list" style="--logo-opacity: {{ opacity_decimal }};">
+  <div class="logo-list__wrapper page-width">
+    {%- if section.settings.title != blank -%}
+      <p class="logo-list__heading">{{ section.settings.title }}</p>
+    {%- endif -%}
+
+    <div class="logo-list__row">
+      {%- for block in section.blocks -%}
+        <div class="logo-list__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="logo-list__link" target="_blank" rel="noopener">
+          {%- endif -%}
+
+          {%- if block.settings.image != blank -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 200 }}"
+              alt="{{ block.settings.image.alt | default: 'Partner logo' }}"
+              width="150"
+              height="60"
+              loading="lazy"
+              class="logo-list__logo"
+            >
+          {%- else -%}
+            <div class="logo-list__placeholder">Logo</div>
+          {%- endif -%}
+
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #logo-list-{{ section.id }} {
+    padding: 48px 0;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__heading {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #8e8e93;
+    margin: 0 0 32px;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__item {
+    opacity: var(--logo-opacity);
+    transition: opacity 0.3s ease;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__item:hover {
+    opacity: 1;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__link {
+    display: block;
+    text-decoration: none;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__logo {
+    max-width: 120px;
+    max-height: 48px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+  }
+
+  #logo-list-{{ section.id }} .logo-list__item:hover .logo-list__logo {
+    filter: grayscale(0%);
+  }
+
+  #logo-list-{{ section.id }} .logo-list__placeholder {
+    width: 120px;
+    height: 48px;
+    background: #e5e5ea;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #8e8e93;
+  }
+
+  @media (max-width: 768px) {
+    #logo-list-{{ section.id }} .logo-list__row {
+      gap: 24px;
+    }
+    #logo-list-{{ section.id }} .logo-list__logo {
+      max-width: 80px;
+      max-height: 36px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Logo List",
+  "tag": "section",
+  "class": "section-logo-list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Trusted by leading brands"
+    },
+    {
+      "type": "range",
+      "id": "opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "unit": "%",
+      "label": "Logo opacity"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo List"
+    }
+  ]
+}
+{% endschema %}

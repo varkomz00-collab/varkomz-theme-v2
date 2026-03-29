@@ -1,0 +1,368 @@
+{%- liquid
+  assign video_url = section.settings.video_url | default: ''
+  assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+  assign height = section.settings.height | default: '100vh'
+  assign title_size = section.settings.title_size | default: 64
+  assign text_alignment = section.settings.text_alignment | default: 'center'
+
+  assign is_youtube = false
+  assign is_vimeo = false
+  assign is_mp4 = false
+  assign video_id = ''
+
+  if video_url contains 'youtube.com' or video_url contains 'youtu.be'
+    assign is_youtube = true
+    if video_url contains 'youtu.be/'
+      assign video_id = video_url | split: 'youtu.be/' | last | split: '?' | first
+    elsif video_url contains 'v='
+      assign video_id = video_url | split: 'v=' | last | split: '&' | first
+    endif
+  elsif video_url contains 'vimeo.com'
+    assign is_vimeo = true
+    assign video_id = video_url | split: 'vimeo.com/' | last | split: '?' | first | split: '/' | last
+  elsif video_url contains '.mp4'
+    assign is_mp4 = true
+  endif
+-%}
+
+<section
+  id="hero-video-{{ section.id }}"
+  class="hero-video"
+  style="
+    --hero-height: {{ height }};
+    --overlay-opacity: {{ overlay_opacity }};
+    --title-size: {{ title_size }}px;
+    --text-align: {{ text_alignment }};
+  "
+>
+  <div class="hero-video__bg">
+    {%- if is_youtube and video_id != '' -%}
+      <iframe
+        src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1&mute=1&loop=1&playlist={{ video_id }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+        loading="lazy"
+        class="hero-video__iframe"
+      ></iframe>
+    {%- elsif is_vimeo and video_id != '' -%}
+      <iframe
+        src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1&muted=1&loop=1&background=1"
+        frameborder="0"
+        allow="autoplay"
+        allowfullscreen
+        loading="lazy"
+        class="hero-video__iframe"
+      ></iframe>
+    {%- elsif is_mp4 -%}
+      <video autoplay muted loop playsinline class="hero-video__video">
+        <source src="{{ video_url }}" type="video/mp4">
+      </video>
+    {%- elsif section.settings.fallback_image != blank -%}
+      <img
+        src="{{ section.settings.fallback_image | image_url: width: 1920 }}"
+        alt="{{ section.settings.title | escape }}"
+        loading="eager"
+        class="hero-video__fallback-img"
+      >
+    {%- endif -%}
+    <div class="hero-video__gradient"></div>
+    <div class="hero-video__overlay"></div>
+  </div>
+
+  <div class="hero-video__content page-width">
+    {%- if section.settings.pre_headline != blank -%}
+      <p class="hero-video__pre-headline">{{ section.settings.pre_headline }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.title != blank -%}
+      <h1 class="hero-video__title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="hero-video__subtitle">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <div class="hero-video__actions">
+      {%- if section.settings.link_text != blank -%}
+        <a href="{{ section.settings.link }}" class="hero-video__btn hero-video__btn--primary">
+          {{ section.settings.link_text }}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.second_link_text != blank -%}
+        <a href="{{ section.settings.second_link }}" class="hero-video__btn hero-video__btn--secondary">
+          {{ section.settings.second_link_text }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.social_proof_text != blank -%}
+      <p class="hero-video__social-proof">{{ section.settings.social_proof_text }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #hero-video-{{ section.id }} {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--hero-height);
+    min-height: 400px;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 40%, #0d4f8b 70%, #0a1628 100%);
+    z-index: 0;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__iframe,
+  #hero-video-{{ section.id }} .hero-video__video,
+  #hero-video-{{ section.id }} .hero-video__fallback-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    object-fit: cover;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__iframe {
+    width: 110vw;
+    height: 110vh;
+    pointer-events: none;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--overlay-opacity));
+    z-index: 2;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__content {
+    position: relative;
+    z-index: 3;
+    text-align: var(--text-align);
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__pre-headline {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.85;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__title {
+    font-size: var(--title-size);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 20px;
+    letter-spacing: -0.02em;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__subtitle {
+    font-size: 18px;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin: 0 0 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__actions {
+    display: flex;
+    gap: 16px;
+    justify-content: {{ text_alignment }};
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__btn {
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__btn--primary {
+    background: #fff;
+    color: #0a1628;
+  }
+
+  #hero-video-{{ section.id }} .hero-video__btn--primary:hover {
+    background: #e8e8e8;
+    transform: translateY(-2px);
+  }
+
+  #hero-video-{{ section.id }} .hero-video__btn--secondary {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+  }
+
+  #hero-video-{{ section.id }} .hero-video__btn--secondary:hover {
+    border-color: #fff;
+    transform: translateY(-2px);
+  }
+
+  #hero-video-{{ section.id }} .hero-video__social-proof {
+    font-size: 14px;
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    #hero-video-{{ section.id }} .hero-video__title {
+      font-size: calc(var(--title-size) * 0.55);
+    }
+    #hero-video-{{ section.id }} .hero-video__subtitle {
+      font-size: 16px;
+    }
+    #hero-video-{{ section.id }} .hero-video__actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero Video",
+  "tag": "section",
+  "class": "section-hero-video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "YouTube, Vimeo, or direct MP4 URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "%",
+      "label": "Overlay opacity"
+    },
+    {
+      "type": "text",
+      "id": "pre_headline",
+      "label": "Pre-headline",
+      "default": "Welcome to Varkomz"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Elevate Your Space"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "default": 64,
+      "unit": "px",
+      "label": "Title font size"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtitle",
+      "default": "Premium quality products designed for modern living."
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Primary button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "second_link_text",
+      "label": "Secondary button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "second_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "social_proof_text",
+      "label": "Social proof text",
+      "default": "Trusted by 10,000+ customers worldwide"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        { "value": "100vh", "label": "Full screen" },
+        { "value": "750px", "label": "750px" },
+        { "value": "650px", "label": "650px" },
+        { "value": "550px", "label": "550px" },
+        { "value": "450px", "label": "450px" }
+      ],
+      "default": "100vh"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Video"
+    }
+  ]
+}
+{% endschema %}

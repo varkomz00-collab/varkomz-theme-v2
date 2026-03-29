@@ -4,13 +4,38 @@
       "type": "main-product",
       "settings": {
         "show_quantity": true,
-        "show_vendor": false
+        "show_vendor": true
       }
     },
-    "test_5_extra": {
-      "type": "test-5-product-extra",
-      "settings": {}
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "title": "What Our Riders Say",
+        "bg_color": "#f5f5f7",
+        "text_color": "#1d1d1f"
+      },
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Best water sports gear shop in Qatar. Authentic products, fast shipping, and Shamlan is always available on WhatsApp.",
+            "author": "Ahmed K.",
+            "author_info": "Dubai, UAE"
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Bought my Hyperlite setup here. Great quality, great service. Will definitely be back for more gear.",
+            "author": "Khalid M.",
+            "author_info": "Doha, Qatar"
+          }
+        }
+      },
+      "block_order": ["review_1", "review_2"]
     }
   },
-  "order": ["main", "test_5_extra"]
+  "order": ["main", "testimonials"]
 }

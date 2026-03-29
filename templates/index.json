@@ -1,70 +1,213 @@
 {
   "sections": {
-    "main_hero": {
-      "type": "hero-banner",
+    "hero_video": {
+      "type": "hero-video",
       "settings": {
-        "pre_heading": "QATAR'S AUTHORIZED TIGÉ, ATX, HYPERLITE & HO SPORTS DEALER",
-        "heading": "Your Wave. Your Way.",
+        "video_url": "https://www.youtube.com/watch?v=UoGpSv3t2eA",
+        "overlay_opacity": 45,
+        "pre_headline": "QATAR'S AUTHORIZED TIGÉ, ATX, HYPERLITE & HO SPORTS DEALER",
+        "title": "Your Wave.\nYour Way.",
+        "title_size": 72,
         "subheading": "Premium boats, pro-grade gear, and waterfront apparel — hand-picked for Gulf riders. Free worldwide shipping from Doha.",
-        "button_label": "Shop Best Sellers",
-        "button_link": "/collections/all",
-        "button_label_2": "Build Your Dream Boat",
-        "button_link_2": "/pages/contact",
-        "bg_color": "#0a1628"
+        "link_text": "Shop Best Sellers",
+        "link": "/collections/all",
+        "second_link_text": "Build Your Dream Boat",
+        "second_link": "/pages/contact",
+        "social_proof_text": "★★★★★ Trusted by 500+ riders across the GCC",
+        "height": "100vh",
+        "text_alignment": "bottom-left"
       }
     },
-    "featured_collection_section": {
+    "scrolling_text": {
+      "type": "scrolling-text",
+      "settings": {
+        "text": "LOCALLY IN QATAR  •  FREE WORLDWIDE SHIPPING  •  AUTHORIZED DEALER  •  14-DAY RETURNS",
+        "text_size": 16,
+        "speed": 200,
+        "direction": "left"
+      }
+    },
+    "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "heading": "Featured Products",
+        "heading": "Shop By Category",
         "collection": "all",
         "products_to_show": 8,
         "show_view_all": true
       }
     },
-    "test_1_static": {
-      "type": "test-1-static",
-      "settings": {}
-    },
-    "test_2_settings": {
-      "type": "test-2-settings",
+    "why_shop_with_us": {
+      "type": "text-columns",
       "settings": {
-        "heading": "CUSTOM HEADING FROM JSON",
-        "message": "This text was set in the JSON template, not the Shopify customizer. Settings wiring confirmed.",
-        "bg_color": "#2563eb",
-        "text_color": "#ffffff"
-      }
-    },
-    "test_3_blocks": {
-      "type": "test-3-blocks",
-      "settings": {},
+        "title": "Why Riders Choose Varkomz"
+      },
       "blocks": {
-        "card_a": {
-          "type": "card",
-          "settings": { "title": "Card A — Authorized Dealer", "description": "Official Tigé & ATX dealer in Qatar" }
+        "usp_1": {
+          "type": "column",
+          "settings": {
+            "title": "Qatar's Only Authorized Dealer",
+            "text": "<p>Official dealer for Tigé, ATX, Hyperlite & HO Sports. Every product is genuine, warranty-backed, and sourced direct from the manufacturer.</p>"
+          }
         },
-        "card_b": {
-          "type": "card",
-          "settings": { "title": "Card B — Free Shipping", "description": "Free worldwide shipping from Doha" }
+        "usp_2": {
+          "type": "column",
+          "settings": {
+            "title": "Free Worldwide Shipping",
+            "text": "<p>Orders ship same-day from our Doha warehouse. Average delivery: 3 days GCC, 7 days worldwide. Every order tracked door-to-door.</p>"
+          }
         },
-        "card_c": {
-          "type": "card",
-          "settings": { "title": "Card C — Expert Support", "description": "WhatsApp us: +974 5183 5555" }
+        "usp_3": {
+          "type": "column",
+          "settings": {
+            "title": "Expert Support in <2 Hours",
+            "text": "<p>Real water sports enthusiasts, not chatbots. WhatsApp, call, or email — we respond within 2 business hours, every time.</p>"
+          }
+        },
+        "usp_4": {
+          "type": "column",
+          "settings": {
+            "title": "14-Day Easy Returns",
+            "text": "<p>Changed your mind? Return any unused item within 14 days for a full refund. No questions, no hassle, no restocking fees.</p>"
+          }
         }
       },
-      "block_order": ["card_a", "card_b", "card_c"]
+      "block_order": ["usp_1", "usp_2", "usp_3", "usp_4"]
     },
-    "test_4_dynamic": {
-      "type": "test-4-dynamic",
-      "settings": {}
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "title": "What Our Riders Say",
+        "bg_color": "#f5f5f7",
+        "text_color": "#1d1d1f"
+      },
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Ordered Pro-V goggles on Monday, had them by Wednesday in Dubai. The real deal — box sealed, warranty card inside. These guys are legit.",
+            "author": "Ahmed K.",
+            "author_info": "Dubai, UAE"
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Bought a full Hyperlite setup — board, bindings, vest. Shamlan walked me through everything on WhatsApp, even sent a video of proper binding setup.",
+            "author": "Khalid M.",
+            "author_info": "Doha, Qatar"
+          }
+        },
+        "review_3": {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Configured my Tigé Z5 through Varkomz. From quote to marina delivery in Yas Island took 8 weeks. The boat is absolutely perfect — worth every dirham.",
+            "author": "James R.",
+            "author_info": "Abu Dhabi, UAE"
+          }
+        }
+      },
+      "block_order": ["review_1", "review_2", "review_3"]
+    },
+    "logo_list_partners": {
+      "type": "logo-list",
+      "settings": {
+        "title": "Official Partnerships",
+        "opacity": 80
+      },
+      "blocks": {
+        "logo_tige": {
+          "type": "logo",
+          "settings": {
+            "link": "/collections/all"
+          }
+        },
+        "logo_atx": {
+          "type": "logo",
+          "settings": {
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": ["logo_tige", "logo_atx"]
+    },
+    "tige_section": {
+      "type": "text-and-image",
+      "settings": {
+        "subtitle": "TIGÉ BOATS — BUILT FOR THE GULF",
+        "title": "Design Your Tigé. Ride It This Season.",
+        "text": "<p>Configure your dream Tigé boat online, get a custom quote in 24 hours, and take delivery at our Doha marina. 12 Tigé boats delivered in Qatar since 2023.</p>",
+        "button_label": "Build My Tigé",
+        "button_link": "/pages/contact",
+        "layout": "image_right",
+        "image_width": 50
+      }
+    },
+    "atx_section": {
+      "type": "text-and-image",
+      "settings": {
+        "subtitle": "ATX SURF BOATS — PERFORMANCE MEETS STYLE",
+        "title": "Your ATX. Configured in Minutes.",
+        "text": "<p>Choose your hull, features, and finish. We handle import, registration, and marina delivery across the GCC. Starting from QAR 280,000 with finance available.</p>",
+        "button_label": "Build My ATX",
+        "button_link": "/pages/contact",
+        "layout": "image_left",
+        "image_width": 50
+      }
+    },
+    "lifestyle_gallery": {
+      "type": "fading-images",
+      "settings": {
+        "title_size": 45,
+        "overlay_opacity": 10,
+        "height": "650px"
+      },
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "title": "Life on the Water",
+            "subtitle": "Gulf riders, Doha sunsets, and the gear that makes it possible."
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "title": "Built for Performance",
+            "subtitle": "Pro-grade equipment from the world's best water sports brands."
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "title": "Your Adventure Starts Here",
+            "subtitle": "From first ride to competition day — we've got you covered."
+          }
+        }
+      },
+      "block_order": ["slide_1", "slide_2", "slide_3"]
+    },
+    "contact_form": {
+      "type": "contact-form",
+      "settings": {
+        "title": "Get Your Custom Boat Quote in 24 Hours",
+        "text": "<p>Tell us what you're looking for and we'll send a detailed quote with pricing, delivery timeline, and financing options. Whether it's a Tigé, ATX, or gear bundle — we've got you covered.</p>",
+        "show_phone": true
+      }
     }
   },
   "order": [
-    "main_hero",
-    "featured_collection_section",
-    "test_1_static",
-    "test_2_settings",
-    "test_3_blocks",
-    "test_4_dynamic"
+    "hero_video",
+    "scrolling_text",
+    "featured_collection",
+    "why_shop_with_us",
+    "testimonials",
+    "logo_list_partners",
+    "tige_section",
+    "atx_section",
+    "lifestyle_gallery",
+    "contact_form"
   ]
 }

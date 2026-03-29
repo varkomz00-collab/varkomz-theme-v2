@@ -1,0 +1,255 @@
+{%- liquid
+  assign slide_count = section.blocks.size
+  assign overlay_opacity = section.settings.overlay_opacity | default: 30
+  assign overlay_decimal = overlay_opacity | divided_by: 100.0
+  assign height = section.settings.height | default: '600px'
+  assign title_size = section.settings.title_size | default: 48
+  assign total_duration = slide_count | times: 5
+-%}
+
+<section
+  id="fading-images-{{ section.id }}"
+  class="fading-images"
+  style="
+    --slide-count: {{ slide_count }};
+    --overlay-opacity: {{ overlay_decimal }};
+    --height: {{ height }};
+    --title-size: {{ title_size }}px;
+    --total-duration: {{ total_duration }}s;
+  "
+>
+  <div class="fading-images__slides">
+    {%- for block in section.blocks -%}
+      {%- assign delay = forloop.index0 | times: 5 -%}
+      <div
+        class="fading-images__slide"
+        style="animation-delay: {{ delay }}s;"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.image != blank -%}
+          <img
+            src="{{ block.settings.image | image_url: width: 1920 }}"
+            alt="{{ block.settings.title | default: 'Slide' | escape }}"
+            loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            class="fading-images__image"
+          >
+        {%- else -%}
+          <div class="fading-images__placeholder"></div>
+        {%- endif -%}
+
+        <div class="fading-images__overlay"></div>
+
+        <div class="fading-images__content">
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="fading-images__link">{%- endif -%}
+
+          {%- if block.settings.title != blank -%}
+            <h2 class="fading-images__title">{{ block.settings.title }}</h2>
+          {%- endif -%}
+
+          {%- if block.settings.subtitle != blank -%}
+            <p class="fading-images__subtitle">{{ block.settings.subtitle }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.link != blank -%}</a>{%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+<style>
+  {%- comment -%}
+    Crossfade: each slide is visible for ~35% of total cycle, fades in/out over ~15%.
+    Keyframes are generated per-section so slide count is dynamic.
+  {%- endcomment -%}
+
+  {%- if slide_count > 0 -%}
+    {%- assign visible_pct = 100.0 | divided_by: slide_count -%}
+    {%- assign fade_pct = visible_pct | times: 0.3 -%}
+
+    @keyframes fading-images-fade-{{ section.id }} {
+      0% { opacity: 0; }
+      {{ fade_pct }}% { opacity: 1; }
+      {{ visible_pct | minus: fade_pct }}% { opacity: 1; }
+      {{ visible_pct }}% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+  {%- endif -%}
+
+  #fading-images-{{ section.id }} {
+    position: relative;
+    height: var(--height);
+    overflow: hidden;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: fading-images-fade-{{ section.id }} var(--total-duration) infinite;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__slide:first-child {
+    opacity: 1;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a3a5c, #0d4f8b);
+  }
+
+  #fading-images-{{ section.id }} .fading-images__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--overlay-opacity));
+    pointer-events: none;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    z-index: 2;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__title {
+    font-size: var(--title-size);
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  #fading-images-{{ section.id }} .fading-images__subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    max-width: 500px;
+  }
+
+  @media (max-width: 768px) {
+    #fading-images-{{ section.id }} .fading-images__title {
+      font-size: calc(var(--title-size) * 0.6);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #fading-images-{{ section.id }} .fading-images__slide {
+      animation: none;
+      opacity: 0;
+    }
+    #fading-images-{{ section.id }} .fading-images__slide:first-child {
+      opacity: 1;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Fading Images",
+  "tag": "section",
+  "class": "section-fading-images",
+  "settings": [
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "default": 48,
+      "unit": "px",
+      "label": "Title font size"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 30,
+      "unit": "%",
+      "label": "Overlay opacity"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        { "value": "100vh", "label": "Full screen" },
+        { "value": "700px", "label": "700px" },
+        { "value": "600px", "label": "600px" },
+        { "value": "500px", "label": "500px" },
+        { "value": "400px", "label": "400px" }
+      ],
+      "default": "600px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Slide Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "A short description"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fading Images",
+      "blocks": [
+        { "type": "slide", "settings": { "title": "Collection One", "subtitle": "Discover the latest arrivals" } },
+        { "type": "slide", "settings": { "title": "Collection Two", "subtitle": "Handpicked for you" } },
+        { "type": "slide", "settings": { "title": "Collection Three", "subtitle": "Limited edition pieces" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
