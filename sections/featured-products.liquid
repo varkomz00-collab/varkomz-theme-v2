@@ -2,43 +2,71 @@
 {%- assign col = collections[collection_handle] -%}
 {%- assign limit = section.settings.products_to_show | default: 8 -%}
 
-<section class="featured-products-section" id="FeaturedProducts-{{ section.id }}">
+<section class="apple-products" id="Products-{{ section.id }}">
   <div class="page-width">
-    {% if section.settings.heading != blank %}
-      <h2 class="featured-products__heading">{{ section.settings.heading }}</h2>
-    {% endif %}
+    <div class="apple-products__header">
+      {% if section.settings.heading != blank %}
+        <h2 class="apple-products__title">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.show_view_all and col.url != blank %}
+        <a href="{{ col.url }}" class="apple-products__link">
+          View All
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      {% endif %}
+    </div>
 
-    <div class="product-grid grid--4-col">
+    <div class="apple-products__grid">
       {%- for product in col.products limit: limit -%}
         {% render 'product-card', product: product %}
       {%- else -%}
-        <p class="empty-state">No products found. Add products to your "{{ collection_handle }}" collection.</p>
+        <p style="grid-column:1/-1;text-align:center;color:var(--vz-gray);padding:3rem 0;">No products yet. Add products to see them here.</p>
       {%- endfor -%}
     </div>
-
-    {% if section.settings.show_view_all and col.products.size > limit %}
-      <div class="featured-products__footer">
-        <a href="{{ col.url }}" class="btn btn-outline">View All</a>
-      </div>
-    {% endif %}
   </div>
 </section>
 
 <style>
-  .featured-products-section {
-    padding: 4rem 0;
+  .apple-products {
+    padding: 80px 0;
   }
-  .featured-products__heading {
-    text-align: center;
+  .apple-products__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  .apple-products__title {
     font-family: var(--font-heading);
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
     color: var(--vz-black);
-    margin-bottom: 2.5rem;
+    margin: 0;
   }
-  .featured-products__footer {
-    text-align: center;
-    margin-top: 2.5rem;
+  .apple-products__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--vz-accent);
+    text-decoration: none;
+    transition: gap 0.2s ease;
+  }
+  .apple-products__link:hover { gap: 10px; }
+  .apple-products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 989px) {
+    .apple-products__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 734px) {
+    .apple-products { padding: 56px 0; }
+    .apple-products__header { flex-direction: column; gap: 8px; margin-bottom: 28px; }
+    .apple-products__grid { gap: 12px; }
   }
 </style>
 
@@ -47,37 +75,11 @@
   "name": "Featured Products",
   "tag": "section",
   "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "What Gulf Riders Are Buying"
-    },
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection"
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "label": "Products to show",
-      "min": 4,
-      "max": 16,
-      "step": 2,
-      "default": 8
-    },
-    {
-      "type": "checkbox",
-      "id": "show_view_all",
-      "label": "Show 'View All' button",
-      "default": true
-    }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What Gulf Riders Are Buying" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 4, "max": 16, "step": 2, "default": 8 },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show 'View All' link", "default": true }
   ],
-  "presets": [
-    {
-      "name": "Featured Products"
-    }
-  ]
+  "presets": [{ "name": "Featured Products" }]
 }
 {% endschema %}

@@ -3,45 +3,35 @@
   assign text_color = section.settings.text_color | default: '#1d1d1f'
 -%}
 
-<section
-  id="testimonials-{{ section.id }}"
-  class="testimonials"
-  style="--bg-color: {{ bg_color }}; --text-color: {{ text_color }};"
->
-  <div class="testimonials__wrapper page-width">
+<section id="testimonials-{{ section.id }}" class="apple-testimonials" style="--t-bg:{{ bg_color }};--t-color:{{ text_color }};">
+  <div class="page-width">
     {%- if section.settings.title != blank -%}
-      <h2 class="testimonials__heading">{{ section.settings.title }}</h2>
+      <h2 class="apple-testimonials__title">{{ section.settings.title }}</h2>
     {%- endif -%}
 
-    <div class="testimonials__grid">
+    <div class="apple-testimonials__grid">
       {%- for block in section.blocks -%}
-        <div class="testimonials__card" {{ block.shopify_attributes }}>
+        <div class="apple-testimonials__card" {{ block.shopify_attributes }}>
           {%- if block.settings.stars > 0 -%}
-            <div class="testimonials__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
-              {%- for i in (1..5) -%}
-                {%- if i <= block.settings.stars -%}
-                  <span class="testimonials__star testimonials__star--filled">&#9733;</span>
-                {%- else -%}
-                  <span class="testimonials__star">&#9733;</span>
-                {%- endif -%}
+            <div class="apple-testimonials__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+              {%- for i in (1..block.settings.stars) -%}
+                <span class="apple-testimonials__star">★</span>
               {%- endfor -%}
             </div>
           {%- endif -%}
 
           {%- if block.settings.text != blank -%}
-            <blockquote class="testimonials__quote">
-              <p>{{ block.settings.text }}</p>
-            </blockquote>
+            <blockquote class="apple-testimonials__quote">{{ block.settings.text }}</blockquote>
           {%- endif -%}
 
-          <div class="testimonials__author-wrap">
+          <footer class="apple-testimonials__footer">
             {%- if block.settings.author != blank -%}
-              <p class="testimonials__author">{{ block.settings.author }}</p>
+              <cite class="apple-testimonials__author">{{ block.settings.author }}</cite>
             {%- endif -%}
             {%- if block.settings.author_info != blank -%}
-              <p class="testimonials__author-info">{{ block.settings.author_info }}</p>
+              <span class="apple-testimonials__meta">{{ block.settings.author_info }}</span>
             {%- endif -%}
-          </div>
+          </footer>
         </div>
       {%- endfor -%}
     </div>
@@ -50,91 +40,75 @@
 
 <style>
   #testimonials-{{ section.id }} {
-    background: var(--bg-color);
-    color: var(--text-color);
-    padding: 60px 0;
+    background: var(--t-bg);
+    color: var(--t-color);
+    padding: 96px 0;
   }
-
-  #testimonials-{{ section.id }} .testimonials__wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  #testimonials-{{ section.id }} .testimonials__heading {
+  #testimonials-{{ section.id }} .apple-testimonials__title {
     text-align: center;
-    font-size: 36px;
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4vw, 40px);
     font-weight: 700;
-    margin: 0 0 48px;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
+    margin: 0 0 64px;
   }
-
-  #testimonials-{{ section.id }} .testimonials__grid {
+  #testimonials-{{ section.id }} .apple-testimonials__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
-
-  #testimonials-{{ section.id }} .testimonials__card {
+  #testimonials-{{ section.id }} .apple-testimonials__card {
     background: var(--vz-white);
-    border-radius: var(--vz-radius);
-    padding: 32px 28px;
+    border-radius: 20px;
+    padding: 36px 32px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-
-  #testimonials-{{ section.id }} .testimonials__stars {
+  #testimonials-{{ section.id }} .apple-testimonials__card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  }
+  #testimonials-{{ section.id }} .apple-testimonials__stars {
     display: flex;
     gap: 2px;
-    font-size: 18px;
+    font-size: 16px;
+    color: #F59E0B;
   }
-
-  #testimonials-{{ section.id }} .testimonials__star {
-    color: #d1d1d6;
-  }
-
-  #testimonials-{{ section.id }} .testimonials__star--filled {
-    color: #F9A825;
-  }
-
-  #testimonials-{{ section.id }} .testimonials__quote {
+  #testimonials-{{ section.id }} .apple-testimonials__quote {
     margin: 0;
-    font-style: italic;
     font-size: 16px;
     line-height: 1.65;
     color: var(--vz-dark);
     flex-grow: 1;
+    font-style: normal;
+    letter-spacing: -0.01em;
   }
-
-  #testimonials-{{ section.id }} .testimonials__quote p {
-    margin: 0;
-  }
-
-  #testimonials-{{ section.id }} .testimonials__author-wrap {
-    border-top: 1px solid var(--vz-border);
+  #testimonials-{{ section.id }} .apple-testimonials__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     padding-top: 16px;
+    border-top: 1px solid var(--vz-border);
   }
-
-  #testimonials-{{ section.id }} .testimonials__author {
+  #testimonials-{{ section.id }} .apple-testimonials__author {
     font-size: 15px;
     font-weight: 600;
-    margin: 0 0 2px;
+    font-style: normal;
   }
-
-  #testimonials-{{ section.id }} .testimonials__author-info {
+  #testimonials-{{ section.id }} .apple-testimonials__meta {
     font-size: 13px;
-    color: var(--vz-gray-secondary);
-    margin: 0;
+    color: var(--vz-gray);
   }
 
-  @media (max-width: 768px) {
-    #testimonials-{{ section.id }} .testimonials__grid {
-      grid-template-columns: 1fr;
-    }
-    #testimonials-{{ section.id }} .testimonials__heading {
-      font-size: 28px;
-    }
+  @media (max-width: 989px) {
+    #testimonials-{{ section.id }} .apple-testimonials__grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 734px) {
+    #testimonials-{{ section.id }} { padding: 64px 0; }
+    #testimonials-{{ section.id }} .apple-testimonials__title { margin-bottom: 40px; }
+    #testimonials-{{ section.id }} .apple-testimonials__grid { grid-template-columns: 1fr; gap: 16px; }
   }
 </style>
 
@@ -142,95 +116,27 @@
 {
   "name": "Testimonials",
   "tag": "section",
-  "class": "section-testimonials",
   "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Section title",
-      "default": "What Our Customers Say"
-    },
-    {
-      "type": "color",
-      "id": "bg_color",
-      "label": "Background color",
-      "default": "#f5f5f7"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Text color",
-      "default": "#1d1d1f"
-    }
+    { "type": "text", "id": "title", "label": "Section title", "default": "What Our Customers Say" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f5f5f7" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#1d1d1f" }
   ],
   "blocks": [
     {
       "type": "testimonial",
       "name": "Testimonial",
       "settings": [
-        {
-          "type": "range",
-          "id": "stars",
-          "min": 0,
-          "max": 5,
-          "step": 1,
-          "default": 5,
-          "label": "Star rating"
-        },
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Quote",
-          "default": "This product completely exceeded my expectations. The quality is outstanding."
-        },
-        {
-          "type": "text",
-          "id": "author",
-          "label": "Author name",
-          "default": "Jane D."
-        },
-        {
-          "type": "text",
-          "id": "author_info",
-          "label": "Author info",
-          "default": "Verified Buyer"
-        }
+        { "type": "range", "id": "stars", "min": 0, "max": 5, "step": 1, "default": 5, "label": "Stars" },
+        { "type": "textarea", "id": "text", "label": "Quote", "default": "Outstanding quality and service." },
+        { "type": "text", "id": "author", "label": "Author", "default": "Customer" },
+        { "type": "text", "id": "author_info", "label": "Info", "default": "Verified Buyer" }
       ]
     }
   ],
-  "presets": [
-    {
-      "name": "Testimonials",
-      "blocks": [
-        {
-          "type": "testimonial",
-          "settings": {
-            "stars": 5,
-            "text": "Absolutely love the quality. Will be ordering again!",
-            "author": "Sarah M.",
-            "author_info": "Verified Buyer"
-          }
-        },
-        {
-          "type": "testimonial",
-          "settings": {
-            "stars": 5,
-            "text": "Fast shipping and the product looks even better in person.",
-            "author": "James K.",
-            "author_info": "Repeat Customer"
-          }
-        },
-        {
-          "type": "testimonial",
-          "settings": {
-            "stars": 4,
-            "text": "Great value for the price. Customer service was very helpful.",
-            "author": "Maria L.",
-            "author_info": "Verified Buyer"
-          }
-        }
-      ]
-    }
-  ]
+  "presets": [{ "name": "Testimonials", "blocks": [
+    { "type": "testimonial", "settings": { "stars": 5, "text": "Best water sports gear selection in the Gulf.", "author": "Ahmed K.", "author_info": "Dubai, UAE" } },
+    { "type": "testimonial", "settings": { "stars": 5, "text": "Fast shipping, genuine products. Highly recommend.", "author": "Khalid M.", "author_info": "Doha, Qatar" } },
+    { "type": "testimonial", "settings": { "stars": 5, "text": "Configured my Tigé through Varkomz. Perfect experience.", "author": "James R.", "author_info": "Abu Dhabi, UAE" } }
+  ] }]
 }
 {% endschema %}

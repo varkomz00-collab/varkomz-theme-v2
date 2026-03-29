@@ -1,26 +1,21 @@
-<section class="brand-showcase-section" id="BrandShowcase-{{ section.id }}">
+<section class="apple-brands" id="Brands-{{ section.id }}">
   <div class="page-width">
     {% if section.settings.heading != blank %}
-      <h2 class="brand-showcase__heading">{{ section.settings.heading }}</h2>
+      <h2 class="apple-brands__title">{{ section.settings.heading }}</h2>
     {% endif %}
 
-    <div class="brand-showcase__grid">
+    <div class="apple-brands__row">
       {% for block in section.blocks %}
-        <a href="{{ block.settings.link | default: '#' }}" class="brand-showcase__item" {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.link | default: '#' }}" class="apple-brands__item" {{ block.shopify_attributes }}>
           {% if block.settings.image != blank %}
             <img
               src="{{ block.settings.image | image_url: width: 300 }}"
               alt="{{ block.settings.name | escape }}"
-              width="200"
-              height="80"
               loading="lazy"
-              class="brand-showcase__logo"
+              class="apple-brands__logo"
             >
           {% else %}
-            <span class="brand-showcase__name">{{ block.settings.name }}</span>
-          {% endif %}
-          {% if block.settings.tagline != blank %}
-            <p class="brand-showcase__tagline">{{ block.settings.tagline }}</p>
+            <span class="apple-brands__name">{{ block.settings.name }}</span>
           {% endif %}
         </a>
       {% endfor %}
@@ -29,71 +24,66 @@
 </section>
 
 <style>
-  .brand-showcase-section {
-    padding: 4rem 0;
+  .apple-brands {
+    padding: 80px 0;
+    border-top: 1px solid var(--vz-border);
+    border-bottom: 1px solid var(--vz-border);
   }
-  .brand-showcase__heading {
+  .apple-brands__title {
     text-align: center;
     font-family: var(--font-heading);
-    font-size: 1.75rem;
-    font-weight: 600;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
     color: var(--vz-black);
-    margin-bottom: 2.5rem;
+    margin: 0 0 56px;
   }
-  .brand-showcase__grid {
+  .apple-brands__row {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 64px;
     flex-wrap: wrap;
-    gap: 3rem;
   }
-  .brand-showcase__item {
+  .apple-brands__item {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-decoration: none;
     color: inherit;
-    transition: transform var(--vz-transition);
+    transition: opacity 0.3s ease;
+    opacity: 0.45;
   }
-  .brand-showcase__item:hover {
-    transform: scale(1.05);
+  .apple-brands__item:hover {
+    opacity: 1;
   }
-  .brand-showcase__logo {
-    max-width: 200px;
-    max-height: 80px;
+  .apple-brands__logo {
+    max-width: 160px;
+    max-height: 60px;
     width: auto;
     height: auto;
     object-fit: contain;
     filter: grayscale(100%);
-    opacity: 0.7;
-    transition: filter var(--vz-transition), opacity var(--vz-transition);
+    transition: filter 0.3s ease;
   }
-  .brand-showcase__item:hover .brand-showcase__logo {
+  .apple-brands__item:hover .apple-brands__logo {
     filter: grayscale(0%);
-    opacity: 1;
   }
-  .brand-showcase__name {
+  .apple-brands__name {
     font-family: var(--font-heading);
-    font-size: 1.5rem;
+    font-size: 24px;
     font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--vz-gray);
-    transition: color var(--vz-transition);
-  }
-  .brand-showcase__item:hover .brand-showcase__name {
     color: var(--vz-black);
   }
-  .brand-showcase__tagline {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--vz-gray);
-    margin-top: 0.5rem;
-  }
-  @media (max-width: 749px) {
-    .brand-showcase__grid { gap: 2rem; }
-    .brand-showcase__logo { max-width: 140px; }
+
+  @media (max-width: 734px) {
+    .apple-brands { padding: 56px 0; }
+    .apple-brands__row { gap: 40px; }
+    .apple-brands__title { margin-bottom: 36px; }
+    .apple-brands__logo { max-width: 120px; }
+    .apple-brands__name { font-size: 18px; }
   }
 </style>
 
@@ -102,52 +92,24 @@
   "name": "Brand Showcase",
   "tag": "section",
   "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Official Brand Partners"
-    }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Official Brand Partners" }
   ],
   "blocks": [
     {
       "type": "brand",
       "name": "Brand",
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Brand logo"
-        },
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Brand name",
-          "default": "Brand Name"
-        },
-        {
-          "type": "text",
-          "id": "tagline",
-          "label": "Tagline"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
-        }
+        { "type": "image_picker", "id": "image", "label": "Logo" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Brand" },
+        { "type": "url", "id": "link", "label": "Link" }
       ]
     }
   ],
-  "presets": [
-    {
-      "name": "Brand Showcase",
-      "blocks": [
-        { "type": "brand", "settings": { "name": "Tigé Boats", "tagline": "BUILT FOR THE GULF", "link": "/collections/all" } },
-        { "type": "brand", "settings": { "name": "ATX Surf Boats", "tagline": "PERFORMANCE MEETS STYLE", "link": "/collections/all" } },
-        { "type": "brand", "settings": { "name": "Hyperlite", "tagline": "PRO-GRADE GEAR", "link": "/collections/all" } },
-        { "type": "brand", "settings": { "name": "HO Sports", "tagline": "RIDE WITH CONFIDENCE", "link": "/collections/all" } }
-      ]
-    }
-  ]
+  "presets": [{ "name": "Brand Showcase", "blocks": [
+    { "type": "brand", "settings": { "name": "Tigé Boats", "link": "/collections/all" } },
+    { "type": "brand", "settings": { "name": "ATX", "link": "/collections/all" } },
+    { "type": "brand", "settings": { "name": "Hyperlite", "link": "/collections/all" } },
+    { "type": "brand", "settings": { "name": "HO Sports", "link": "/collections/all" } }
+  ] }]
 }
 {% endschema %}

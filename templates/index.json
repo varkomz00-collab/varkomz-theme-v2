@@ -2,13 +2,22 @@
   "sections": {
     "announcement_bar": {
       "type": "announcement-bar",
-      "settings": {
-        "text_1": "Authorized Tigé & ATX Dealer — Qatar's Only",
-        "text_2": "14-Day No-Questions Returns",
-        "text_3": "WhatsApp Us: +974 5183 5555 — Reply in <2 Hours",
-        "bg_color": "#0a1628",
-        "text_color": "#ffffff"
-      }
+      "settings": {},
+      "blocks": {
+        "msg_1": {
+          "type": "message",
+          "settings": { "text": "Authorized Tigé & ATX Dealer — Qatar's Only" }
+        },
+        "msg_2": {
+          "type": "message",
+          "settings": { "text": "14-Day No-Questions Returns" }
+        },
+        "msg_3": {
+          "type": "message",
+          "settings": { "text": "WhatsApp Us: +974 5183 5555 — Reply in <2 Hours" }
+        }
+      },
+      "block_order": ["msg_1", "msg_2", "msg_3"]
     },
     "hero_video": {
       "type": "hero-video",
