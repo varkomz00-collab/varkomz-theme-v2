@@ -379,6 +379,76 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
 
 
+  // === STICKY ADD-TO-CART BAR (Mobile) ===
+  (function() {
+    var stickyBar = document.getElementById('StickyAtcBar');
+    var mainAddBtn = document.querySelector('.add-to-cart');
+    if (!stickyBar || !mainAddBtn) return;
+
+    var stickyBtn = stickyBar.querySelector('.sticky-atc-btn');
+    var stickyPrice = stickyBar.querySelector('.sticky-atc-bar__price');
+
+    // Show/hide based on scroll position of main add-to-cart button
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var show = !entry.isIntersecting;
+        stickyBar.classList.toggle('visible', show);
+        document.body.classList.toggle('sticky-atc-visible', show);
+      });
+    }, { threshold: 0 });
+
+    observer.observe(mainAddBtn);
+
+    // Sync variant changes to sticky bar
+    var idInput = document.querySelector('form[action="/cart/add"] input[name="id"]');
+    if (idInput) {
+      var mo = new MutationObserver(function() {
+        if (stickyBtn) stickyBtn.dataset.variantId = idInput.value;
+      });
+      mo.observe(idInput, { attributes: true, attributeFilter: ['value'] });
+    }
+
+    // Sync price text from main price element
+    var priceEl = document.querySelector('.product-current-price');
+    if (priceEl && stickyPrice) {
+      var priceMo = new MutationObserver(function() {
+        stickyPrice.textContent = priceEl.textContent;
+      });
+      priceMo.observe(priceEl, { childList: true, characterData: true, subtree: true });
+    }
+
+    // Sync disabled state from main button
+    var btnMo = new MutationObserver(function() {
+      if (stickyBtn) {
+        stickyBtn.disabled = mainAddBtn.disabled;
+        stickyBtn.textContent = mainAddBtn.textContent;
+      }
+    });
+    btnMo.observe(mainAddBtn, { attributes: true, attributeFilter: ['disabled'], childList: true });
+
+    // Click handler — add to cart via AJAX
+    if (stickyBtn) {
+      stickyBtn.addEventListener('click', function() {
+        if (stickyBtn.disabled) return;
+        var variantId = stickyBtn.dataset.variantId || (idInput && idInput.value);
+        if (!variantId) return;
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+        })
+          .then(function(r) { return r.json(); })
+          .then(function() {
+            // Trigger cart drawer open
+            var cartLink = document.querySelector('.header-cart');
+            if (cartLink) cartLink.click();
+          });
+      });
+    }
+  })();
+
+
   // === SHOPIFY SECTION EVENTS (for customizer live preview) ===
   document.addEventListener('shopify:section:load', function() {});
 

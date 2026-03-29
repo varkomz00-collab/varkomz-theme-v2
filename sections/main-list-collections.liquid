@@ -1,0 +1,60 @@
+{% render 'breadcrumbs' %}
+<div class="collections-list-page page-width">
+  <h1>{{ 'general.collections' | t | default: 'Collections' }}</h1>
+
+  <div class="product-grid grid--3-col">
+    {%- for collection in collections -%}
+      {%- unless collection.handle == 'all' -%}
+        <div class="collection-card">
+          <a href="{{ collection.url }}" class="collection-card-link">
+            {%- if collection.image -%}
+              <img
+                src="{{ collection.image | image_url: width: 600 }}"
+                alt="{{ collection.title | escape }}"
+                width="600"
+                height="{{ 600 | divided_by: collection.image.aspect_ratio | round }}"
+                loading="lazy"
+                class="collection-card-image"
+              >
+            {%- elsif collection.products.first and collection.products.first.featured_image -%}
+              <img
+                src="{{ collection.products.first.featured_image | image_url: width: 600 }}"
+                alt="{{ collection.title | escape }}"
+                width="600"
+                height="400"
+                loading="lazy"
+                class="collection-card-image"
+              >
+            {%- else -%}
+              <div class="collection-card-placeholder">{{ collection.title | truncate: 1, '' }}</div>
+            {%- endif -%}
+            <div class="collection-card-info">
+              <h2 class="collection-card-title">{{ collection.title }}</h2>
+              <p class="collection-card-count">{{ collection.products_count }} products</p>
+            </div>
+          </a>
+        </div>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+  .collections-list-page { padding: 2rem 0 5rem; }
+  .collections-list-page h1 { margin-bottom: 2rem; }
+  .collection-card { border-radius: var(--vz-radius); overflow: hidden; background: var(--vz-white); transition: transform var(--vz-transition), box-shadow var(--vz-transition); }
+  .collection-card:hover { transform: translateY(-4px); box-shadow: var(--vz-shadow-lg); }
+  .collection-card-link { display: block; text-decoration: none; color: inherit; }
+  .collection-card-image { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  .collection-card-placeholder { width: 100%; aspect-ratio: 4/3; background: var(--vz-light-gray); display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 700; color: var(--vz-gray); }
+  .collection-card-info { padding: 1.25rem; }
+  .collection-card-title { font-size: 1.125rem; font-weight: 600; margin: 0 0 4px; }
+  .collection-card-count { font-size: 14px; color: var(--vz-gray); margin: 0; }
+</style>
+
+{% schema %}
+{
+  "name": "Collections List",
+  "settings": []
+}
+{% endschema %}

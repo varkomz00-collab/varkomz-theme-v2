@@ -189,6 +189,14 @@
       },
       "block_order": ["slide_1", "slide_2", "slide_3"]
     },
+    "collections_carousel": {
+      "type": "collection-carousel",
+      "settings": {
+        "heading": "Shop By Collection"
+      },
+      "blocks": {},
+      "block_order": []
+    },
     "contact_form": {
       "type": "contact-form",
       "settings": {
@@ -208,6 +216,7 @@
     "tige_section",
     "atx_section",
     "lifestyle_gallery",
+    "collections_carousel",
     "contact_form"
   ]
 }

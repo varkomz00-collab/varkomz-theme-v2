@@ -7,6 +7,13 @@
         "show_vendor": true
       }
     },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "You May Also Like",
+        "products_to_show": 4
+      }
+    },
     "testimonials": {
       "type": "testimonials",
       "settings": {
@@ -37,5 +44,5 @@
       "block_order": ["review_1", "review_2"]
     }
   },
-  "order": ["main", "testimonials"]
+  "order": ["main", "recommendations", "testimonials"]
 }

@@ -1,12 +1,12 @@
 <div class="search-page page-width">
   <h1>Search</h1>
-  {% form 'get', routes.search_url %}
+  <form action="{{ routes.search_url }}" method="get" role="search">
     <div class="search-form">
       <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search our store..." class="search-input" aria-label="Search">
       <button type="submit" class="btn btn-primary">Search</button>
     </div>
-    <input type="hidden" name="type" value="product">
-  {% endform %}
+    <input type="hidden" name="type" value="product,article,page">
+  </form>
 
   {% if search.performed %}
     {% if search.results_count > 0 %}

@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "contact": {
+      "type": "contact-form",
+      "settings": {
+        "title": "Get Your Custom Boat Quote in 24 Hours",
+        "text": "<p>Tell us what you're looking for and we'll send a detailed quote with pricing, delivery timeline, and financing options.</p>",
+        "show_phone": true
+      }
+    }
+  },
+  "order": ["main", "contact"]
+}

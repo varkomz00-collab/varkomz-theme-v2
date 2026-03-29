@@ -1,0 +1,37 @@
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+<section class="product-recommendations page-width" data-section-id="{{ section.id }}" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="section-heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="product-grid grid--4-col">
+    {%- for product in recommendations.products -%}
+      {% render 'product-card', product: product %}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    }
+  ]
+}
+{% endschema %}
