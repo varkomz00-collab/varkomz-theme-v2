@@ -38,7 +38,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
+  /* scroll-behavior set via media query below */
 }
 
 body {
@@ -1183,18 +1183,25 @@ body.mobile-nav-active {
   margin-top: 0.75rem;
 }
 
-.product-thumbnails img {
+.product-thumbnail {
+  padding: 0;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: var(--vz-radius-sm);
+  cursor: pointer;
+  transition: border-color var(--vz-transition);
+  overflow: hidden;
+}
+
+.product-thumbnail img {
   width: 72px;
   height: 72px;
   object-fit: cover;
-  border-radius: var(--vz-radius-sm);
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color var(--vz-transition);
+  display: block;
 }
 
-.product-thumbnails img.active,
-.product-thumbnails img:hover {
+.product-thumbnail.active,
+.product-thumbnail:hover {
   border-color: var(--vz-black);
 }
 
@@ -2482,6 +2489,11 @@ textarea:focus-visible,
   clip: rect(0, 0, 0, 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
+}
+
+/* Smooth scrolling only when motion is OK */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
 
 /* Global reduced motion */

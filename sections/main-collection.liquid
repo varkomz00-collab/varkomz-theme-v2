@@ -7,11 +7,15 @@
     <div class="collection-description rte">{{ collection.description }}</div>
   {% endif %}
 
-  <div class="product-grid grid--{{ section.settings.columns }}-col">
-    {% for product in collection.products %}
-      {% render 'product-card', product: product %}
-    {% endfor %}
-  </div>
+  {% if collection.products.size > 0 %}
+    <div class="product-grid grid--{{ section.settings.columns }}-col">
+      {% for product in collection.products %}
+        {% render 'product-card', product: product %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="text-align:center;padding:3rem 0;color:var(--vz-gray);">No products found in this collection.</p>
+  {% endif %}
 
   {% if paginate.pages > 1 %}
     <nav class="pagination" role="navigation" aria-label="Pagination">

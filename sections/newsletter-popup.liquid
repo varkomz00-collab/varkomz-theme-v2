@@ -11,9 +11,7 @@
       <p class="newsletter-popup-text">{{ section.settings.text }}</p>
     {% endif %}
 
-    <form method="post" action="/contact" accept-charset="UTF-8" class="newsletter-popup-form">
-      <input type="hidden" name="form_type" value="customer">
-      <input type="hidden" name="utf8" value="✓">
+    {% form 'customer', id: 'NewsletterForm' %}
       <input type="hidden" name="contact[tags]" value="newsletter">
       <div class="newsletter-popup-field">
         <input
@@ -28,7 +26,7 @@
           {{ section.settings.button_label | default: 'Subscribe' }}
         </button>
       </div>
-    </form>
+    {% endform %}
 
     {% if section.settings.disclaimer != blank %}
       <p class="newsletter-popup-disclaimer">{{ section.settings.disclaimer }}</p>

@@ -29,7 +29,7 @@
           {%- endif -%}
 
           {%- if block.settings.text != blank -%}
-            <p class="text-columns__card-text">{{ block.settings.text }}</p>
+            <div class="text-columns__card-text">{{ block.settings.text }}</div>
           {%- endif -%}
 
           {%- if block.settings.link != blank -%}
@@ -155,10 +155,10 @@
           "default": "Feature"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "text",
           "label": "Description",
-          "default": "Describe the value proposition here."
+          "default": "<p>Describe the value proposition here.</p>"
         },
         {
           "type": "url",

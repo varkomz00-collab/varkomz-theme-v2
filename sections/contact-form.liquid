@@ -28,7 +28,7 @@
             type="text"
             id="contact-name-{{ section.id }}"
             name="contact[name]"
-            value="{{ form.name }}"
+            value="{{ form.name | escape }}"
             placeholder="Your name"
             required
             class="contact-form__input"
@@ -73,7 +73,7 @@
             rows="5"
             required
             class="contact-form__textarea"
-          >{{ form.body }}</textarea>
+          >{{ form.body | escape }}</textarea>
         </div>
       </div>
 

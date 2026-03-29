@@ -17,7 +17,7 @@
         src="{{ product.featured_image | image_url: width: 400 }}"
         alt="{{ product.featured_image.alt | default: product.title | escape }}"
         width="400"
-        height="{{ 400 | divided_by: product.featured_image.aspect_ratio | round }}"
+        height="{% if product.featured_image.aspect_ratio and product.featured_image.aspect_ratio > 0 %}{{ 400 | divided_by: product.featured_image.aspect_ratio | round }}{% else %}400{% endif %}"
         loading="lazy"
         class="product-card-image"
       >

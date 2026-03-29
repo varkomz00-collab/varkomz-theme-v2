@@ -7,7 +7,7 @@
 
   <title>
     {{ page_title }}
-    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' | escape }}"{% endif -%}
     {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
     {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
   </title>
@@ -34,8 +34,29 @@
 
   {{ 'base.css' | asset_url | stylesheet_tag }}
 
+  {%- comment -%}Wire theme settings to CSS custom properties{%- endcomment -%}
+  {% style %}
+    :root {
+      --color-primary: {{ settings.color_primary }};
+      --color-secondary: {{ settings.color_secondary }};
+      --color-accent: {{ settings.color_accent }};
+      --color-background: {{ settings.color_background }};
+      --color-text: {{ settings.color_text }};
+    }
+  {% endstyle %}
+
+  {{ settings.font_heading | font_face }}
+  {{ settings.font_body | font_face }}
+
   <script>
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    window.theme = {
+      moneyFormat: {{ shop.money_format | json }},
+      strings: {
+        addToCart: {{ 'products.add_to_cart' | t | json }},
+        soldOut: {{ 'products.sold_out' | t | json }}
+      }
+    };
   </script>
 </head>
 

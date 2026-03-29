@@ -2,6 +2,36 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
+  // === UTILITY: HTML escape to prevent XSS ===
+  function esc(str) {
+    if (!str) return '';
+    var d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // === UTILITY: Format money using Liquid-injected format ===
+  function formatMoney(cents) {
+    if (typeof cents !== 'number') cents = parseInt(cents, 10) || 0;
+    var moneyFormat = window.theme && window.theme.moneyFormat
+      ? window.theme.moneyFormat
+      : '{{ amount }}';
+    var amount = (cents / 100).toFixed(2);
+    var amountNoDecimals = Math.round(cents / 100).toString();
+    var amountWithComma = amount.replace('.', ',');
+    return moneyFormat
+      .replace('{{ amount_with_comma_separator }}', amountWithComma)
+      .replace('{{ amount_no_decimals }}', amountNoDecimals)
+      .replace('{{ amount_no_decimals_with_comma_separator }}', amountNoDecimals)
+      .replace('{{ amount }}', amount);
+  }
+
+  // === TRANSLATED STRINGS ===
+  var strings = (window.theme && window.theme.strings) || {};
+  var strAddToCart = strings.addToCart || 'Add to Cart';
+  var strSoldOut = strings.soldOut || 'Sold Out';
+
+
   // === VARIANT SELECTOR ===
   (function() {
     var form = document.querySelector('form[action="/cart/add"]');
@@ -14,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var compareEl = document.querySelector('.product-compare-price');
     var addBtn = form.querySelector('.add-to-cart');
 
-    // Parse variants JSON from the page
     var variantsScript = document.querySelector('[id^="ProductVariants-"]');
     var variants = [];
     if (variantsScript) {
@@ -32,10 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (match && idInput) {
         idInput.value = match.id;
 
-        // Update price display
-        if (priceEl) {
-          priceEl.textContent = formatMoney(match.price);
-        }
+        if (priceEl) priceEl.textContent = formatMoney(match.price);
         if (compareEl) {
           if (match.compare_at_price && match.compare_at_price > match.price) {
             compareEl.textContent = formatMoney(match.compare_at_price);
@@ -45,14 +71,13 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
 
-        // Update availability
         if (addBtn) {
           if (match.available) {
             addBtn.disabled = false;
-            addBtn.textContent = 'Add to Cart';
+            addBtn.textContent = strAddToCart;
           } else {
             addBtn.disabled = true;
-            addBtn.textContent = 'Sold Out';
+            addBtn.textContent = strSoldOut;
           }
         }
       }
@@ -62,12 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
       select.addEventListener('change', updateVariant);
     });
   })();
-
-  function formatMoney(cents) {
-    return (Shopify && Shopify.formatMoney)
-      ? Shopify.formatMoney(cents)
-      : '$' + (cents / 100).toFixed(2);
-  }
 
 
   // === MOBILE MENU TOGGLE ===
@@ -90,6 +109,41 @@ document.addEventListener('DOMContentLoaded', function() {
         closeIcon.style.display = isOpen ? '' : 'none';
       }
     });
+  })();
+
+
+  // === PRODUCT IMAGE GALLERY ===
+  (function() {
+    var mediaItems = document.querySelectorAll('.product-media-item');
+    if (mediaItems.length <= 1) return;
+
+    // Create thumbnail nav
+    var mediaContainer = document.querySelector('.product-media');
+    if (!mediaContainer) return;
+
+    var thumbNav = document.createElement('div');
+    thumbNav.className = 'product-thumbnails';
+
+    mediaItems.forEach(function(item, index) {
+      var img = item.querySelector('img');
+      if (!img) return;
+
+      var thumb = document.createElement('button');
+      thumb.className = 'product-thumbnail' + (index === 0 ? ' active' : '');
+      thumb.setAttribute('aria-label', 'View image ' + (index + 1));
+      thumb.innerHTML = '<img src="' + esc(img.src.replace(/width=\d+/, 'width=100')) + '" alt="" width="80" height="80">';
+
+      thumb.addEventListener('click', function() {
+        mediaItems.forEach(function(m) { m.classList.remove('active'); });
+        thumbNav.querySelectorAll('.product-thumbnail').forEach(function(t) { t.classList.remove('active'); });
+        item.classList.add('active');
+        thumb.classList.add('active');
+      });
+
+      thumbNav.appendChild(thumb);
+    });
+
+    mediaContainer.appendChild(thumbNav);
   })();
 
 
@@ -121,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.addEventListener('click', closeDrawer);
     if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
 
-    // Close on Escape
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && drawer.classList.contains('active')) closeDrawer();
     });
@@ -145,31 +198,71 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       if (checkoutBtn) checkoutBtn.style.display = '';
-      itemsContainer.innerHTML = cart.items.map(function(item) {
-        var img = item.image ? item.image.replace(/(\.[^.]+)$/, '_180x$1') : '';
-        return '<div class="cart-drawer-item" data-key="' + item.key + '">' +
-          (img ? '<img src="' + img + '" alt="' + item.title + '" width="72" height="72">' : '') +
-          '<div style="flex:1">' +
-            '<p style="font-weight:600;margin:0 0 4px">' + item.product_title + '</p>' +
-            (item.variant_title ? '<p style="font-size:13px;color:var(--vz-gray);margin:0 0 4px">' + item.variant_title + '</p>' : '') +
-            '<p style="margin:0">' + formatMoney(item.final_line_price) + '</p>' +
-            '<div style="display:flex;align-items:center;gap:8px;margin-top:8px">' +
-              '<button class="cart-qty-btn" data-key="' + item.key + '" data-qty="' + (item.quantity - 1) + '" aria-label="Decrease quantity">&minus;</button>' +
-              '<span>' + item.quantity + '</span>' +
-              '<button class="cart-qty-btn" data-key="' + item.key + '" data-qty="' + (item.quantity + 1) + '" aria-label="Increase quantity">+</button>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-      }).join('');
+
+      // Build cart items safely (XSS-safe: all user strings escaped)
+      itemsContainer.innerHTML = '';
+      cart.items.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'cart-drawer-item';
+        row.dataset.key = item.key;
+
+        if (item.image) {
+          var img = document.createElement('img');
+          img.src = item.image.replace(/(\.[^.]+)$/, '_180x$1');
+          img.alt = item.title;
+          img.width = 72;
+          img.height = 72;
+          row.appendChild(img);
+        }
+
+        var info = document.createElement('div');
+        info.style.flex = '1';
+
+        var title = document.createElement('p');
+        title.style.cssText = 'font-weight:600;margin:0 0 4px';
+        title.textContent = item.product_title;
+        info.appendChild(title);
+
+        if (item.variant_title) {
+          var variant = document.createElement('p');
+          variant.style.cssText = 'font-size:13px;color:var(--vz-gray);margin:0 0 4px';
+          variant.textContent = item.variant_title;
+          info.appendChild(variant);
+        }
+
+        var price = document.createElement('p');
+        price.style.margin = '0';
+        price.textContent = formatMoney(item.final_line_price);
+        info.appendChild(price);
+
+        var qtyWrap = document.createElement('div');
+        qtyWrap.style.cssText = 'display:flex;align-items:center;gap:8px;margin-top:8px';
+
+        var minusBtn = document.createElement('button');
+        minusBtn.className = 'cart-qty-btn';
+        minusBtn.setAttribute('aria-label', 'Decrease quantity');
+        minusBtn.innerHTML = '&minus;';
+        minusBtn.addEventListener('click', function() { changeQuantity(item.key, item.quantity - 1); });
+
+        var qtySpan = document.createElement('span');
+        qtySpan.textContent = item.quantity;
+
+        var plusBtn = document.createElement('button');
+        plusBtn.className = 'cart-qty-btn';
+        plusBtn.setAttribute('aria-label', 'Increase quantity');
+        plusBtn.textContent = '+';
+        plusBtn.addEventListener('click', function() { changeQuantity(item.key, item.quantity + 1); });
+
+        qtyWrap.appendChild(minusBtn);
+        qtyWrap.appendChild(qtySpan);
+        qtyWrap.appendChild(plusBtn);
+        info.appendChild(qtyWrap);
+
+        row.appendChild(info);
+        itemsContainer.appendChild(row);
+      });
 
       if (totalEl) totalEl.textContent = formatMoney(cart.total_price);
-
-      // Attach quantity change listeners
-      itemsContainer.querySelectorAll('.cart-qty-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          changeQuantity(btn.dataset.key, parseInt(btn.dataset.qty, 10));
-        });
-      });
     }
 
     function changeQuantity(key, qty) {
@@ -207,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function() { openDrawer(); })
         .catch(function(err) {
           console.error('Add to cart failed:', err);
-          form.submit(); // Fallback to normal submit
+          form.submit();
         });
     });
 
@@ -228,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!popup) return;
 
     var closeBtn = popup.querySelector('.newsletter-popup-close');
-    var overlay = popup.querySelector('.newsletter-popup-overlay');
+    var overlayEl = popup.querySelector('.newsletter-popup-overlay');
     var form = popup.querySelector('form');
     var COOKIE_NAME = 'vz_newsletter_dismissed';
     var DISMISS_DAYS = 30;
@@ -244,10 +337,8 @@ document.addEventListener('DOMContentLoaded', function() {
       document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
     }
 
-    // Don't show if dismissed within DISMISS_DAYS
     if (getCookie(COOKIE_NAME)) return;
 
-    // Show after delay
     var delay = parseInt(popup.dataset.delay || '5000', 10);
     setTimeout(function() {
       popup.classList.add('active');
@@ -261,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (closeBtn) closeBtn.addEventListener('click', closePopup);
-    if (overlay) overlay.addEventListener('click', closePopup);
+    if (overlayEl) overlayEl.addEventListener('click', closePopup);
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && popup.classList.contains('active')) closePopup();
     });
@@ -269,19 +360,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
       form.addEventListener('submit', function(e) {
         e.preventDefault();
-        var email = form.querySelector('input[type="email"]').value;
-        if (!email) return;
-
-        // Post to Shopify customer API
-        fetch('/contact', {
+        var successMsg = document.createElement('p');
+        successMsg.style.cssText = 'text-align:center;font-size:18px;font-weight:600;';
+        successMsg.textContent = 'Welcome aboard! Check your inbox.';
+        // Submit the Shopify form natively via fetch
+        var formData = new FormData(form);
+        fetch(form.action, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: 'form_type=customer&utf8=%E2%9C%93&contact%5Bemail%5D=' + encodeURIComponent(email) + '&contact%5Btags%5D=newsletter'
+          body: formData
         }).then(function() {
-          form.innerHTML = '<p style="text-align:center;font-size:18px;font-weight:600;">Welcome aboard! Check your inbox.</p>';
+          form.parentNode.replaceChild(successMsg, form);
           setTimeout(closePopup, 2500);
         }).catch(function() {
-          form.submit(); // Fallback
+          form.submit();
         });
       });
     }
@@ -289,9 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   // === SHOPIFY SECTION EVENTS (for customizer live preview) ===
-  document.addEventListener('shopify:section:load', function() {
-    // Re-initialize any section-specific JS here if needed
-  });
+  document.addEventListener('shopify:section:load', function() {});
 
   document.addEventListener('shopify:section:select', function(event) {
     var section = document.getElementById('shopify-section-' + event.detail.sectionId);

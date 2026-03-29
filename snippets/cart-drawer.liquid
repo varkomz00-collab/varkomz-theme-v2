@@ -9,7 +9,24 @@
   </div>
 
   <div class="cart-drawer-items">
-    <p style="text-align:center;color:var(--vz-gray);padding:2rem 0;">Your cart is empty</p>
+    {% if cart.item_count > 0 %}
+      {% for item in cart.items %}
+        <div class="cart-drawer-item" data-key="{{ item.key }}">
+          {% if item.image %}
+            <img src="{{ item.image | image_url: width: 180 }}" alt="{{ item.title | escape }}" width="72" height="72">
+          {% endif %}
+          <div style="flex:1">
+            <p style="font-weight:600;margin:0 0 4px">{{ item.product.title | escape }}</p>
+            {% if item.variant.title != 'Default Title' %}
+              <p style="font-size:13px;color:var(--vz-gray);margin:0 0 4px">{{ item.variant.title | escape }}</p>
+            {% endif %}
+            <p style="margin:0">{{ item.final_line_price | money }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p style="text-align:center;color:var(--vz-gray);padding:2rem 0;">Your cart is empty</p>
+    {% endif %}
   </div>
 
   <div class="cart-drawer-footer">
