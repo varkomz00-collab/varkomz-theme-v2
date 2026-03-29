@@ -53,14 +53,14 @@
     color: var(--vz-white);
   }
   .collection-header__simple {
-    padding: 3rem 0 1.5rem;
+    padding: 24px 0 16px;
     text-align: center;
   }
   .collection-header__title {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 4px;
   }
   .collection-header__description {
     font-size: 1rem;
@@ -75,13 +75,14 @@
     color: var(--vz-gray);
   }
   .collection-header__count {
-    font-size: 0.8125rem;
-    opacity: 0.7;
+    font-size: 14px;
+    color: var(--vz-gray, #6e6e73);
     margin: 0;
   }
-  @media (max-width: 749px) {
+  @media screen and (max-width: 749px) {
     .collection-header__banner { height: 200px; }
-    .collection-header__title { font-size: 1.75rem; }
+    .collection-header__simple { padding: 16px 0 12px; }
+    .collection-header__title { font-size: 22px; }
   }
 </style>
 

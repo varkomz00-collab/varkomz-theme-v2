@@ -317,20 +317,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // === NEWSLETTER POPUP ===
   (function() {
-    var popup = document.getElementById('NewsletterPopup');
-    if (!popup) return;
-
-    var closeBtn = popup.querySelector('.newsletter-popup-close');
-    var overlayEl = popup.querySelector('.newsletter-popup-overlay');
-    var form = popup.querySelector('form');
-    var COOKIE_NAME = 'vz_newsletter_dismissed';
-    var DISMISS_DAYS = 30;
+    var COOKIE_NAME = 'varkomz_popup_dismissed';
+    var COOKIE_DAYS = 7;
+    var POPUP_DELAY = 8000;
+    var SCROLL_TRIGGER = 0.5;
 
     function getCookie(name) {
       var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
       return match ? match[2] : null;
     }
-
     function setCookie(name, value, days) {
       var d = new Date();
       d.setTime(d.getTime() + (days * 86400000));
@@ -339,54 +334,85 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (getCookie(COOKIE_NAME)) return;
 
+    var popup = document.getElementById('NewsletterPopup');
+    if (!popup) return;
+
     var shown = false;
+
     function showPopup() {
       if (shown) return;
       shown = true;
       popup.classList.add('active');
+      popup.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
 
-    // Delay-based trigger (default 30s)
-    var delay = parseInt(popup.dataset.delay || '30000', 10);
-    setTimeout(showPopup, delay);
-
-    // Exit-intent trigger (mouse leaves viewport top)
-    if (popup.dataset.exitIntent === 'true') {
-      document.addEventListener('mouseout', function(e) {
-        if (e.clientY <= 0 && !shown) showPopup();
-      });
-    }
-
-    function closePopup() {
+    function hidePopup() {
       popup.classList.remove('active');
+      popup.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      setCookie(COOKIE_NAME, '1', DISMISS_DAYS);
+      setCookie(COOKIE_NAME, '1', COOKIE_DAYS);
     }
 
-    if (closeBtn) closeBtn.addEventListener('click', closePopup);
-    if (overlayEl) overlayEl.addEventListener('click', closePopup);
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && popup.classList.contains('active')) closePopup();
+    // Trigger: 8s delay
+    var timer = setTimeout(showPopup, POPUP_DELAY);
+
+    // Trigger: 50% scroll depth
+    function onScroll() {
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      if (window.scrollY / docHeight >= SCROLL_TRIGGER) {
+        showPopup();
+        window.removeEventListener('scroll', onScroll);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Exit-intent
+    document.addEventListener('mouseout', function(e) {
+      if (e.clientY <= 0 && !shown) showPopup();
     });
 
+    // Dismiss handlers
+    var closeBtn = popup.querySelector('.newsletter-popup-close');
+    var overlayEl = popup.querySelector('.newsletter-popup-overlay');
+
+    if (closeBtn) closeBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      hidePopup();
+      clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    });
+
+    if (overlayEl) overlayEl.addEventListener('click', function() {
+      hidePopup();
+      clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && popup.classList.contains('active')) {
+        hidePopup();
+        clearTimeout(timer);
+        window.removeEventListener('scroll', onScroll);
+      }
+    });
+
+    // Handle form submission
+    var form = popup.querySelector('form');
     if (form) {
       form.addEventListener('submit', function(e) {
         e.preventDefault();
-        var successMsg = document.createElement('p');
-        successMsg.style.cssText = 'text-align:center;font-size:18px;font-weight:600;';
-        successMsg.textContent = 'Welcome aboard! Check your inbox.';
-        // Submit the Shopify form natively via fetch
         var formData = new FormData(form);
-        fetch(form.action, {
-          method: 'POST',
-          body: formData
-        }).then(function() {
-          form.parentNode.replaceChild(successMsg, form);
-          setTimeout(closePopup, 2500);
-        }).catch(function() {
-          form.submit();
-        });
+        fetch(form.action, { method: 'POST', body: formData })
+          .then(function() {
+            var msg = document.createElement('p');
+            msg.style.cssText = 'text-align:center;font-size:18px;font-weight:600;padding:1rem 0;';
+            msg.textContent = 'Welcome aboard! Check your inbox.';
+            form.parentNode.replaceChild(msg, form);
+            setTimeout(hidePopup, 2500);
+          })
+          .catch(function() { form.submit(); });
       });
     }
   })();
@@ -394,23 +420,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // === COLLECTIONS CAROUSEL ===
   (function() {
-    document.querySelectorAll('.carousel-track').forEach(function(track) {
-      var wrapper = track.closest('.carousel-container');
+    document.querySelectorAll('.apple-carousel__track').forEach(function(track) {
+      var wrapper = track.closest('.apple-carousel__container');
       if (!wrapper) return;
 
-      var prevBtn = wrapper.querySelector('.carousel-arrow--prev');
-      var nextBtn = wrapper.querySelector('.carousel-arrow--next');
-      var dotsContainer = wrapper.parentElement.querySelector('.carousel-dots');
+      var prevBtn = wrapper.querySelector('.apple-carousel__arrow--prev');
+      var nextBtn = wrapper.querySelector('.apple-carousel__arrow--next');
+      var section = track.closest('.apple-carousel');
+      var dotsContainer = section ? section.querySelector('.apple-carousel__dots') : null;
       var cards = Array.from(track.children);
       if (cards.length === 0) return;
 
       // Show arrows if content overflows
       function checkOverflow() {
-        var overflows = track.scrollWidth > track.clientWidth;
+        var overflows = track.scrollWidth > track.clientWidth + 5;
         if (prevBtn) prevBtn.style.display = overflows ? 'flex' : 'none';
         if (nextBtn) nextBtn.style.display = overflows ? 'flex' : 'none';
       }
       checkOverflow();
+      setTimeout(checkOverflow, 500);
+      setTimeout(checkOverflow, 1500);
       window.addEventListener('resize', checkOverflow);
 
       // Arrow navigation
@@ -419,30 +448,26 @@ document.addEventListener('DOMContentLoaded', function() {
       if (nextBtn) nextBtn.addEventListener('click', function() { track.scrollBy({ left: scrollAmount(), behavior: 'smooth' }); });
 
       // Auto-advance every 5 seconds
-      var autoplayInterval = setInterval(function() {
-        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
-          track.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
-        }
-      }, 5000);
-
-      // Pause on hover/touch
-      track.addEventListener('mouseenter', function() { clearInterval(autoplayInterval); });
-      track.addEventListener('mouseleave', function() {
-        autoplayInterval = setInterval(function() {
+      var autoTimer;
+      function startAutoplay() {
+        autoTimer = setInterval(function() {
           if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
             track.scrollTo({ left: 0, behavior: 'smooth' });
           } else {
             track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
           }
         }, 5000);
-      });
-      track.addEventListener('touchstart', function() { clearInterval(autoplayInterval); }, { passive: true });
+      }
+      startAutoplay();
+
+      // Pause on hover/touch
+      track.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
+      track.addEventListener('mouseleave', function() { startAutoplay(); });
+      track.addEventListener('touchstart', function() { clearInterval(autoTimer); }, { passive: true });
 
       // Build dots
       if (dotsContainer && cards.length > 0) {
-        var cardWidth = cards[0].offsetWidth + 12;
+        var cardWidth = cards[0].offsetWidth + 16;
         var visibleCards = Math.round(track.clientWidth / cardWidth) || 1;
         var dotCount = Math.ceil(cards.length / visibleCards);
         for (var i = 0; i < dotCount; i++) {
@@ -459,7 +484,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Update active dot on scroll
         track.addEventListener('scroll', function() {
-          var scrollRatio = track.scrollLeft / (track.scrollWidth - track.clientWidth);
+          var maxScroll = track.scrollWidth - track.clientWidth;
+          if (maxScroll <= 0) return;
+          var scrollRatio = track.scrollLeft / maxScroll;
           var activeDot = Math.round(scrollRatio * (dotCount - 1));
           dotsContainer.querySelectorAll('.carousel-dot').forEach(function(d, idx) {
             d.classList.toggle('active', idx === activeDot);
