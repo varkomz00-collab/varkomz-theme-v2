@@ -1,4 +1,4 @@
-<div id="NewsletterPopup" class="newsletter-popup" data-delay="{{ section.settings.delay | times: 1000 }}">
+<div id="NewsletterPopup" class="newsletter-popup" data-delay="{{ section.settings.delay | times: 1000 }}" data-exit-intent="{{ section.settings.exit_intent }}">
   <div class="newsletter-popup-overlay"></div>
   <div class="newsletter-popup-modal">
     <button class="newsletter-popup-close" aria-label="Close popup">&times;</button>
@@ -23,7 +23,7 @@
           class="newsletter-popup-input"
         >
         <button type="submit" class="btn btn-primary newsletter-popup-submit">
-          {{ section.settings.button_label | default: 'Subscribe' }}
+          {{ section.settings.button_label | default: 'Get 10% Off' }}
         </button>
       </div>
     {% endform %}
@@ -43,82 +43,75 @@
     align-items: center;
     justify-content: center;
   }
-  .newsletter-popup.active {
-    display: flex;
-  }
+  .newsletter-popup.active { display: flex; }
   .newsletter-popup-overlay {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
   }
   .newsletter-popup-modal {
     position: relative;
-    background: var(--vz-white, #fff);
-    border-radius: var(--vz-radius, 14px);
+    background: var(--vz-white);
+    border-radius: 20px;
     padding: 3rem 2.5rem;
-    max-width: 480px;
+    max-width: 440px;
     width: 90%;
     text-align: center;
-    box-shadow: var(--vz-shadow-lg, 0 8px 30px rgba(0,0,0,0.12));
+    box-shadow: 0 24px 64px rgba(0,0,0,0.2);
   }
   .newsletter-popup-close {
     position: absolute;
-    top: 12px;
-    right: 16px;
-    background: none;
-    border: none;
+    top: 12px; right: 16px;
+    background: none; border: none;
     font-size: 1.75rem;
     cursor: pointer;
-    color: var(--vz-gray, #6e6e73);
+    color: var(--vz-gray);
     line-height: 1;
   }
-  .newsletter-popup-close:hover {
-    color: var(--vz-black, #1d1d1f);
-  }
+  .newsletter-popup-close:hover { color: var(--vz-black); }
   .newsletter-popup-title {
-    font-size: 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     margin-bottom: 0.75rem;
   }
   .newsletter-popup-text {
-    color: var(--vz-gray, #6e6e73);
+    color: var(--vz-gray);
     margin-bottom: 1.5rem;
     font-size: 15px;
     line-height: 1.6;
   }
-  .newsletter-popup-field {
-    display: flex;
-    gap: 8px;
-  }
+  .newsletter-popup-field { display: flex; gap: 8px; }
   .newsletter-popup-input {
     flex: 1;
-    padding: 12px 16px;
-    border: 1px solid var(--vz-border, #e8e8ed);
+    padding: 14px 20px;
+    border: 1px solid var(--vz-border);
     border-radius: 980px;
     font-size: 15px;
+    font-family: inherit;
     outline: none;
+    transition: border-color 0.2s ease;
   }
   .newsletter-popup-input:focus {
-    border-color: var(--vz-accent, #0071e3);
-    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    border-color: var(--vz-accent);
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
   }
   .newsletter-popup-submit {
     white-space: nowrap;
     border-radius: 980px;
-    padding: 12px 24px;
+    padding: 14px 24px;
   }
   .newsletter-popup-disclaimer {
     font-size: 12px;
-    color: var(--vz-gray-secondary, #86868b);
+    color: var(--vz-gray);
     margin-top: 1rem;
     line-height: 1.4;
   }
   @media (max-width: 480px) {
-    .newsletter-popup-modal {
-      padding: 2rem 1.5rem;
-    }
-    .newsletter-popup-field {
-      flex-direction: column;
-    }
+    .newsletter-popup-modal { padding: 2rem 1.5rem; }
+    .newsletter-popup-field { flex-direction: column; }
   }
 </style>
 
@@ -126,46 +119,13 @@
 {
   "name": "Newsletter Popup",
   "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Title",
-      "default": "Join the Crew"
-    },
-    {
-      "type": "textarea",
-      "id": "text",
-      "label": "Description",
-      "default": "Get 10% off your first order, plus early access to new arrivals and exclusive deals."
-    },
-    {
-      "type": "text",
-      "id": "placeholder",
-      "label": "Email placeholder",
-      "default": "Enter your email"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button text",
-      "default": "Get 10% Off"
-    },
-    {
-      "type": "text",
-      "id": "disclaimer",
-      "label": "Disclaimer text",
-      "default": "No spam, ever. Unsubscribe anytime."
-    },
-    {
-      "type": "range",
-      "id": "delay",
-      "label": "Show after (seconds)",
-      "min": 1,
-      "max": 30,
-      "step": 1,
-      "default": 5,
-      "unit": "s"
-    }
+    { "type": "text", "id": "title", "label": "Title", "default": "Get 10% Off Your First Order" },
+    { "type": "textarea", "id": "text", "label": "Description", "default": "Join 500+ Gulf riders. Get early access to new drops, exclusive deals, and riding content." },
+    { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Enter your email" },
+    { "type": "text", "id": "button_label", "label": "Button", "default": "Get 10% Off" },
+    { "type": "text", "id": "disclaimer", "label": "Disclaimer", "default": "One email per week. Unsubscribe anytime. No spam, ever." },
+    { "type": "range", "id": "delay", "label": "Show after (seconds)", "min": 5, "max": 60, "step": 5, "default": 30, "unit": "s" },
+    { "type": "checkbox", "id": "exit_intent", "label": "Also trigger on exit intent", "default": true }
   ]
 }
 {% endschema %}

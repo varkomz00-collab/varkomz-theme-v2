@@ -339,11 +339,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (getCookie(COOKIE_NAME)) return;
 
-    var delay = parseInt(popup.dataset.delay || '5000', 10);
-    setTimeout(function() {
+    var shown = false;
+    function showPopup() {
+      if (shown) return;
+      shown = true;
       popup.classList.add('active');
       document.body.style.overflow = 'hidden';
-    }, delay);
+    }
+
+    // Delay-based trigger (default 30s)
+    var delay = parseInt(popup.dataset.delay || '30000', 10);
+    setTimeout(showPopup, delay);
+
+    // Exit-intent trigger (mouse leaves viewport top)
+    if (popup.dataset.exitIntent === 'true') {
+      document.addEventListener('mouseout', function(e) {
+        if (e.clientY <= 0 && !shown) showPopup();
+      });
+    }
 
     function closePopup() {
       popup.classList.remove('active');

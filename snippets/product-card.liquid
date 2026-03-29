@@ -38,4 +38,14 @@
       </div>
     </div>
   </a>
+
+  {%- if product.available -%}
+    <form action="/cart/add" method="post" class="product-card__quick-add">
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="product-card__add-btn" aria-label="Add {{ product.title | escape }} to cart">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add to Cart
+      </button>
+    </form>
+  {%- endif -%}
 </div>

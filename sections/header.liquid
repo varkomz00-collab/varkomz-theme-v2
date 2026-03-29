@@ -3,9 +3,9 @@
     <!-- Mobile menu toggle -->
     <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="MobileNav">
       <svg class="icon-hamburger" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="3" y1="7" x2="21" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="3" y1="17" x2="21" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
       <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;">
         <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -27,24 +27,88 @@
       {% endif %}
     </a>
 
+    <!-- Desktop Mega-Menu Navigation -->
     <nav class="header-nav" role="navigation" aria-label="Main navigation">
-      {% if section.settings.menu != blank %}
-        {% assign main_menu = linklists[section.settings.menu] %}
-        <ul class="nav-list">
-          {% for link in main_menu.links %}
-            <li class="nav-item{% if link.active %} active{% endif %}">
-              <a href="{{ link.url }}" {% if link.links.size > 0 %}aria-haspopup="true" aria-expanded="false"{% endif %}>{{ link.title }}</a>
-              {% if link.links.size > 0 %}
-                <ul class="nav-dropdown" role="menu">
-                  {% for child_link in link.links %}
-                    <li role="none"><a href="{{ child_link.url }}" role="menuitem">{{ child_link.title }}</a></li>
-                  {% endfor %}
+      <ul class="nav-list">
+        {%- comment -%}Boats dropdown{%- endcomment -%}
+        <li class="nav-item nav-item--has-dropdown">
+          <a href="/collections/all" aria-haspopup="true" aria-expanded="false">Boats</a>
+          <div class="nav-mega" role="menu">
+            <div class="nav-mega__inner page-width">
+              <div class="nav-mega__col">
+                <h4 class="nav-mega__heading">By Brand</h4>
+                <ul>
+                  <li><a href="/collections/all" role="menuitem">Tigé Boats</a></li>
+                  <li><a href="/collections/all" role="menuitem">ATX Surf Boats</a></li>
                 </ul>
-              {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+              </div>
+              <div class="nav-mega__col">
+                <h4 class="nav-mega__heading">Get Started</h4>
+                <ul>
+                  <li><a href="/pages/contact" role="menuitem">Schedule a Sea Trial</a></li>
+                  <li><a href="/pages/contact" role="menuitem">Request a Quote</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        {%- comment -%}Gear dropdown{%- endcomment -%}
+        <li class="nav-item nav-item--has-dropdown">
+          <a href="/collections/all" aria-haspopup="true" aria-expanded="false">Gear</a>
+          <div class="nav-mega" role="menu">
+            <div class="nav-mega__inner page-width">
+              <div class="nav-mega__col">
+                <h4 class="nav-mega__heading">By Sport</h4>
+                <ul>
+                  <li><a href="/collections/all" role="menuitem">Wakeboards & Bindings</a></li>
+                  <li><a href="/collections/all" role="menuitem">Wakesurfers</a></li>
+                  <li><a href="/collections/all" role="menuitem">Water Skis</a></li>
+                  <li><a href="/collections/all" role="menuitem">Tubes & Towables</a></li>
+                </ul>
+              </div>
+              <div class="nav-mega__col">
+                <h4 class="nav-mega__heading">Safety & Comfort</h4>
+                <ul>
+                  <li><a href="/collections/all" role="menuitem">Life Vests & Impact Vests</a></li>
+                  <li><a href="/collections/all" role="menuitem">Helmets</a></li>
+                  <li><a href="/collections/all" role="menuitem">Ropes & Handles</a></li>
+                </ul>
+              </div>
+              <div class="nav-mega__col">
+                <h4 class="nav-mega__heading">Accessories</h4>
+                <ul>
+                  <li><a href="/collections/all" role="menuitem">Board Bags</a></li>
+                  <li><a href="/collections/all" role="menuitem">Boat Accessories</a></li>
+                  <li><a href="/collections/all" role="menuitem">Parts & Hardware</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        {%- comment -%}Brands dropdown{%- endcomment -%}
+        <li class="nav-item nav-item--has-dropdown">
+          <a href="/collections" aria-haspopup="true" aria-expanded="false">Brands</a>
+          <div class="nav-mega" role="menu">
+            <div class="nav-mega__inner page-width">
+              <div class="nav-mega__col">
+                <h4 class="nav-mega__heading">Our Brands</h4>
+                <ul>
+                  <li><a href="/collections/all" role="menuitem">Tigé</a></li>
+                  <li><a href="/collections/all" role="menuitem">ATX</a></li>
+                  <li><a href="/collections/all" role="menuitem">Hyperlite</a></li>
+                  <li><a href="/collections/all" role="menuitem">HO Sports</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item"><a href="/collections/all">Apparel</a></li>
+        <li class="nav-item"><a href="/collections/all">Sale</a></li>
+        <li class="nav-item"><a href="/pages/contact">Contact</a></li>
+      </ul>
     </nav>
 
     <div class="header-actions">
@@ -54,12 +118,17 @@
           <line x1="13" y1="13" x2="18" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </a>
+      <a href="/account" class="header-account" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
       <a href="/cart" class="header-cart" aria-label="Cart ({{ cart.item_count }})">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M5 7H19L17 15H7L5 7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M5 7L4 2H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="8" cy="18" r="1" fill="currentColor"/>
-          <circle cx="16" cy="18" r="1" fill="currentColor"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
         {% if cart.item_count > 0 %}
           <span class="cart-count">{{ cart.item_count }}</span>
@@ -70,41 +139,123 @@
 
   <!-- Mobile Navigation Drawer -->
   <div id="MobileNav" class="mobile-nav" aria-hidden="true">
-    {% if section.settings.menu != blank %}
-      {% assign main_menu = linklists[section.settings.menu] %}
-      <ul class="mobile-nav__list">
-        {% for link in main_menu.links %}
-          <li class="mobile-nav__item{% if link.active %} active{% endif %}">
-            <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
-            {% if link.links.size > 0 %}
-              <ul class="mobile-nav__sublist">
-                {% for child_link in link.links %}
-                  <li><a href="{{ child_link.url }}" class="mobile-nav__sublink">{{ child_link.title }}</a></li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+    <ul class="mobile-nav__list">
+      <li class="mobile-nav__item">
+        <a href="/collections/all" class="mobile-nav__link">Boats</a>
+        <ul class="mobile-nav__sublist">
+          <li><a href="/collections/all" class="mobile-nav__sublink">Tigé Boats</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">ATX Surf Boats</a></li>
+          <li><a href="/pages/contact" class="mobile-nav__sublink">Schedule a Sea Trial</a></li>
+        </ul>
+      </li>
+      <li class="mobile-nav__item">
+        <a href="/collections/all" class="mobile-nav__link">Gear</a>
+        <ul class="mobile-nav__sublist">
+          <li><a href="/collections/all" class="mobile-nav__sublink">Wakeboards & Bindings</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">Wakesurfers</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">Life Vests</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">Tubes & Towables</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">Ropes & Handles</a></li>
+        </ul>
+      </li>
+      <li class="mobile-nav__item">
+        <a href="/collections" class="mobile-nav__link">Brands</a>
+        <ul class="mobile-nav__sublist">
+          <li><a href="/collections/all" class="mobile-nav__sublink">Tigé</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">ATX</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">Hyperlite</a></li>
+          <li><a href="/collections/all" class="mobile-nav__sublink">HO Sports</a></li>
+        </ul>
+      </li>
+      <li class="mobile-nav__item"><a href="/collections/all" class="mobile-nav__link">Apparel</a></li>
+      <li class="mobile-nav__item"><a href="/collections/all" class="mobile-nav__link">Sale</a></li>
+      <li class="mobile-nav__item"><a href="/pages/contact" class="mobile-nav__link">Contact</a></li>
+    </ul>
+    <div class="mobile-nav__footer">
+      <a href="https://wa.me/97451835555" class="mobile-nav__wa">WhatsApp: +974 5183 5555</a>
+    </div>
   </div>
 </header>
+
+<style>
+  /* Mega-menu styles */
+  .nav-item--has-dropdown { position: relative; }
+  .nav-mega {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 480px;
+    background: var(--vz-white);
+    border-radius: 16px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.12);
+    padding: 32px;
+    z-index: 100;
+    border: 1px solid var(--vz-border);
+  }
+  .nav-item--has-dropdown:hover .nav-mega,
+  .nav-item--has-dropdown:focus-within .nav-mega { display: block; }
+  .nav-mega__inner {
+    display: flex;
+    gap: 40px;
+    padding: 0;
+    max-width: none;
+  }
+  .nav-mega__col { min-width: 140px; }
+  .nav-mega__heading {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--vz-gray);
+    margin-bottom: 12px;
+  }
+  .nav-mega ul { list-style: none; padding: 0; margin: 0; }
+  .nav-mega li { margin-bottom: 8px; }
+  .nav-mega a {
+    font-size: 15px;
+    color: var(--vz-black);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .nav-mega a:hover { color: var(--vz-accent); }
+
+  /* Account icon */
+  .header-account { display: flex; align-items: center; }
+
+  /* Mobile nav footer */
+  .mobile-nav__footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--vz-border);
+  }
+  .mobile-nav__wa {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--vz-green);
+  }
+  .mobile-nav__sublist {
+    padding: 4px 0 8px 16px;
+    list-style: none;
+  }
+  .mobile-nav__sublink {
+    display: block;
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--vz-gray);
+  }
+
+  @media (max-width: 989px) {
+    .nav-mega { display: none !important; }
+  }
+</style>
 
 {% schema %}
 {
   "name": "Header",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Menu",
-      "default": "main-menu"
-    }
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Fallback menu", "default": "main-menu" }
   ]
 }
 {% endschema %}

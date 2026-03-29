@@ -31,11 +31,34 @@
             </div>
             {% if section.settings.show_phone %}
               <div class="apple-quote__field">
-                <input type="tel" name="contact[phone]" placeholder="Phone (optional)" class="apple-quote__input">
+                <div style="display:flex;gap:8px;">
+                  <select name="contact[country_code]" class="apple-quote__input" style="flex:0 0 90px;padding-right:4px;">
+                    <option value="+974">🇶🇦 +974</option>
+                    <option value="+971">🇦🇪 +971</option>
+                    <option value="+966">🇸🇦 +966</option>
+                    <option value="+965">🇰🇼 +965</option>
+                    <option value="+973">🇧🇭 +973</option>
+                    <option value="+968">🇴🇲 +968</option>
+                  </select>
+                  <input type="tel" name="contact[phone]" placeholder="Phone number" class="apple-quote__input" style="flex:1;">
+                </div>
               </div>
             {% endif %}
             <div class="apple-quote__field apple-quote__field--full">
-              <textarea name="contact[body]" rows="3" required placeholder="What are you looking for?" class="apple-quote__input apple-quote__textarea">{{ form.body | escape }}</textarea>
+              <select name="contact[interest]" class="apple-quote__input">
+                <option value="" disabled selected>I'm interested in...</option>
+                <option value="Tigé Boat">Tigé Boat</option>
+                <option value="ATX Boat">ATX Surf Boat</option>
+                <option value="Wakeboard Gear">Wakeboard Gear</option>
+                <option value="Wakesurf Gear">Wakesurf Gear</option>
+                <option value="Life Vests">Life Vests & Safety</option>
+                <option value="Apparel">Apparel & Lifestyle</option>
+                <option value="Bulk Order">Bulk / Corporate Order</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="apple-quote__field apple-quote__field--full">
+              <textarea name="contact[body]" rows="3" required placeholder="Tell us more — model, quantity, timeline..." class="apple-quote__input apple-quote__textarea">{{ form.body | escape }}</textarea>
             </div>
           </div>
 
