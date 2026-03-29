@@ -49,11 +49,6 @@
   {%- comment -%}SEO: Canonical URL{%- endcomment -%}
   <link rel="canonical" href="{{ canonical_url }}">
 
-  {%- comment -%}SEO: Pagination signals{%- endcomment -%}
-  {%- if paginate -%}
-    {%- if paginate.previous -%}<link rel="prev" href="{{ paginate.previous.url }}">{%- endif -%}
-    {%- if paginate.next -%}<link rel="next" href="{{ paginate.next.url }}">{%- endif -%}
-  {%- endif -%}
 
   <!-- Open Graph -->
   <meta property="og:site_name" content="{{ shop.name }}">
@@ -78,19 +73,19 @@
 
   {{ 'base.css' | asset_url | stylesheet_tag }}
 
-  {%- comment -%}Wire theme settings to CSS custom properties{%- endcomment -%}
+  {%- comment -%}Wire theme settings to CSS custom properties (guarded){%- endcomment -%}
   {% style %}
     :root {
-      --color-primary: {{ settings.color_primary }};
-      --color-secondary: {{ settings.color_secondary }};
-      --color-accent: {{ settings.color_accent }};
-      --color-background: {{ settings.color_background }};
-      --color-text: {{ settings.color_text }};
+      {%- if settings.color_primary and settings.color_primary != blank %}--color-primary: {{ settings.color_primary }};{% endif %}
+      {%- if settings.color_secondary and settings.color_secondary != blank %}--color-secondary: {{ settings.color_secondary }};{% endif %}
+      {%- if settings.color_accent and settings.color_accent != blank %}--color-accent: {{ settings.color_accent }};{% endif %}
+      {%- if settings.color_background and settings.color_background != blank %}--color-background: {{ settings.color_background }};{% endif %}
+      {%- if settings.color_text and settings.color_text != blank %}--color-text: {{ settings.color_text }};{% endif %}
     }
   {% endstyle %}
 
-  {{ settings.font_heading | font_face }}
-  {{ settings.font_body | font_face }}
+  {%- if settings.font_heading -%}{{ settings.font_heading | font_face }}{%- endif -%}
+  {%- if settings.font_body -%}{{ settings.font_body | font_face }}{%- endif -%}
 
   <script>
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');

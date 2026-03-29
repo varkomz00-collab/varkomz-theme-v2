@@ -185,6 +185,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(cart) {
           renderCartItems(cart);
           updateCartCount(cart.item_count);
+        })
+        .catch(function(err) {
+          console.error('Cart refresh failed:', err);
         });
     }
 

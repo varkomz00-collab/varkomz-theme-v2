@@ -4,13 +4,28 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "settings": {
-        "text_1": "Free Worldwide Shipping on All Orders",
-        "text_2": "Authorized Tigé & ATX Dealer — Qatar's Only",
-        "text_3": "WhatsApp Us: +974 5183 5555 — Reply in <2 Hours",
-        "bg_color": "#1d1d1f",
-        "text_color": "#ffffff"
-      }
+      "blocks": {
+        "msg_1": {
+          "type": "message",
+          "settings": {
+            "text": "Free Worldwide Shipping on All Orders"
+          }
+        },
+        "msg_2": {
+          "type": "message",
+          "settings": {
+            "text": "Authorized Tigé & ATX Dealer — Qatar's Only"
+          }
+        },
+        "msg_3": {
+          "type": "message",
+          "settings": {
+            "text": "WhatsApp Us: +974 5183 5555 — Reply in <2 Hours"
+          }
+        }
+      },
+      "block_order": ["msg_1", "msg_2", "msg_3"],
+      "settings": {}
     },
     "header": {
       "type": "header",

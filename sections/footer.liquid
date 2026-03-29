@@ -12,41 +12,59 @@
         </div>
       </div>
 
-      {%- comment -%}Shop column{%- endcomment -%}
+      {%- comment -%}Shop column — reads from Shopify menu{%- endcomment -%}
       <div class="footer-column">
-        <h4>Shop</h4>
-        <ul>
-          <li><a href="/collections/all">All Products</a></li>
-          <li><a href="/collections/all">Wakeboards</a></li>
-          <li><a href="/collections/all">Life Vests</a></li>
-          <li><a href="/collections/all">Apparel</a></li>
-          <li><a href="/collections/all">Accessories</a></li>
-          <li><a href="/collections/all">Sale</a></li>
-        </ul>
+        <h4>{{ section.settings.shop_menu_title | default: 'Shop' }}</h4>
+        {%- assign shop_menu = linklists[section.settings.shop_menu] -%}
+        {% if shop_menu and shop_menu.links.size > 0 %}
+          <ul>
+            {%- for link in shop_menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {% else %}
+          <ul>
+            <li><a href="/collections/all">All Products</a></li>
+          </ul>
+        {% endif %}
       </div>
 
-      {%- comment -%}Brands column{%- endcomment -%}
+      {%- comment -%}Brands column — reads from Shopify menu{%- endcomment -%}
       <div class="footer-column">
-        <h4>Brands</h4>
-        <ul>
-          <li><a href="/collections/all">Tigé Boats</a></li>
-          <li><a href="/collections/all">ATX Surf Boats</a></li>
-          <li><a href="/collections/all">Hyperlite</a></li>
-          <li><a href="/collections/all">HO Sports</a></li>
-        </ul>
+        <h4>{{ section.settings.brands_menu_title | default: 'Brands' }}</h4>
+        {%- assign brands_menu = linklists[section.settings.brands_menu] -%}
+        {% if brands_menu and brands_menu.links.size > 0 %}
+          <ul>
+            {%- for link in brands_menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {% else %}
+          <ul>
+            <li><a href="/collections">All Brands</a></li>
+          </ul>
+        {% endif %}
       </div>
 
-      {%- comment -%}Support column{%- endcomment -%}
+      {%- comment -%}Support column — reads from Shopify menu{%- endcomment -%}
       <div class="footer-column">
-        <h4>Support</h4>
-        <ul>
-          <li><a href="/pages/contact">Contact Us</a></li>
-          <li><a href="/pages/contact">Request a Quote</a></li>
-          <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
-          <li><a href="/policies/refund-policy">Returns & Refunds</a></li>
-          <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
-          <li><a href="/policies/terms-of-service">Terms of Service</a></li>
-        </ul>
+        <h4>{{ section.settings.support_menu_title | default: 'Support' }}</h4>
+        {%- assign support_menu = linklists[section.settings.support_menu] -%}
+        {% if support_menu and support_menu.links.size > 0 %}
+          <ul>
+            {%- for link in support_menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {% else %}
+          <ul>
+            <li><a href="/pages/contact">Contact Us</a></li>
+            <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
+            <li><a href="/policies/refund-policy">Returns & Refunds</a></li>
+            <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+            <li><a href="/policies/terms-of-service">Terms of Service</a></li>
+          </ul>
+        {% endif %}
       </div>
     </div>
 
@@ -174,6 +192,13 @@
 {% schema %}
 {
   "name": "Footer",
-  "settings": []
+  "settings": [
+    { "type": "link_list", "id": "shop_menu", "label": "Shop menu", "default": "footer" },
+    { "type": "text", "id": "shop_menu_title", "label": "Shop column title", "default": "Shop" },
+    { "type": "link_list", "id": "brands_menu", "label": "Brands menu" },
+    { "type": "text", "id": "brands_menu_title", "label": "Brands column title", "default": "Brands" },
+    { "type": "link_list", "id": "support_menu", "label": "Support menu" },
+    { "type": "text", "id": "support_menu_title", "label": "Support column title", "default": "Support" }
+  ]
 }
 {% endschema %}

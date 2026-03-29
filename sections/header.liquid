@@ -1,3 +1,5 @@
+{%- assign main_menu = linklists[section.settings.menu] -%}
+
 <header class="site-header" data-section-id="{{ section.id }}">
   <div class="header-wrapper page-width">
     <!-- Mobile menu toggle -->
@@ -27,87 +29,38 @@
       {% endif %}
     </a>
 
-    <!-- Desktop Mega-Menu Navigation -->
+    <!-- Desktop Navigation — reads from Shopify menu -->
     <nav class="header-nav" role="navigation" aria-label="Main navigation">
       <ul class="nav-list">
-        {%- comment -%}Boats dropdown{%- endcomment -%}
-        <li class="nav-item nav-item--has-dropdown">
-          <a href="/collections/all" aria-haspopup="true" aria-expanded="false">Boats</a>
-          <div class="nav-mega" role="menu">
-            <div class="nav-mega__inner page-width">
-              <div class="nav-mega__col">
-                <h4 class="nav-mega__heading">By Brand</h4>
-                <ul>
-                  <li><a href="/collections/all" role="menuitem">Tigé Boats</a></li>
-                  <li><a href="/collections/all" role="menuitem">ATX Surf Boats</a></li>
-                </ul>
+        {%- for link in main_menu.links -%}
+          {%- if link.links.size > 0 -%}
+            <li class="nav-item nav-item--has-dropdown">
+              <a href="{{ link.url }}" aria-haspopup="true" aria-expanded="false">{{ link.title }}</a>
+              <div class="nav-mega" role="menu">
+                <div class="nav-mega__inner page-width">
+                  {%- for child_link in link.links -%}
+                    <div class="nav-mega__col">
+                      {%- if child_link.links.size > 0 -%}
+                        <h4 class="nav-mega__heading">{{ child_link.title }}</h4>
+                        <ul>
+                          {%- for grandchild_link in child_link.links -%}
+                            <li><a href="{{ grandchild_link.url }}" role="menuitem">{{ grandchild_link.title }}</a></li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- else -%}
+                        <a href="{{ child_link.url }}" role="menuitem" class="nav-mega__direct-link">{{ child_link.title }}</a>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
               </div>
-              <div class="nav-mega__col">
-                <h4 class="nav-mega__heading">Get Started</h4>
-                <ul>
-                  <li><a href="/pages/contact" role="menuitem">Schedule a Sea Trial</a></li>
-                  <li><a href="/pages/contact" role="menuitem">Request a Quote</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        {%- comment -%}Gear dropdown{%- endcomment -%}
-        <li class="nav-item nav-item--has-dropdown">
-          <a href="/collections/all" aria-haspopup="true" aria-expanded="false">Gear</a>
-          <div class="nav-mega" role="menu">
-            <div class="nav-mega__inner page-width">
-              <div class="nav-mega__col">
-                <h4 class="nav-mega__heading">By Sport</h4>
-                <ul>
-                  <li><a href="/collections/all" role="menuitem">Wakeboards & Bindings</a></li>
-                  <li><a href="/collections/all" role="menuitem">Wakesurfers</a></li>
-                  <li><a href="/collections/all" role="menuitem">Water Skis</a></li>
-                  <li><a href="/collections/all" role="menuitem">Tubes & Towables</a></li>
-                </ul>
-              </div>
-              <div class="nav-mega__col">
-                <h4 class="nav-mega__heading">Safety & Comfort</h4>
-                <ul>
-                  <li><a href="/collections/all" role="menuitem">Life Vests & Impact Vests</a></li>
-                  <li><a href="/collections/all" role="menuitem">Helmets</a></li>
-                  <li><a href="/collections/all" role="menuitem">Ropes & Handles</a></li>
-                </ul>
-              </div>
-              <div class="nav-mega__col">
-                <h4 class="nav-mega__heading">Accessories</h4>
-                <ul>
-                  <li><a href="/collections/all" role="menuitem">Board Bags</a></li>
-                  <li><a href="/collections/all" role="menuitem">Boat Accessories</a></li>
-                  <li><a href="/collections/all" role="menuitem">Parts & Hardware</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        {%- comment -%}Brands dropdown{%- endcomment -%}
-        <li class="nav-item nav-item--has-dropdown">
-          <a href="/collections" aria-haspopup="true" aria-expanded="false">Brands</a>
-          <div class="nav-mega" role="menu">
-            <div class="nav-mega__inner page-width">
-              <div class="nav-mega__col">
-                <h4 class="nav-mega__heading">Our Brands</h4>
-                <ul>
-                  <li><a href="/collections/all" role="menuitem">Tigé</a></li>
-                  <li><a href="/collections/all" role="menuitem">ATX</a></li>
-                  <li><a href="/collections/all" role="menuitem">Hyperlite</a></li>
-                  <li><a href="/collections/all" role="menuitem">HO Sports</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <li class="nav-item"><a href="/collections/all">Apparel</a></li>
-        <li class="nav-item"><a href="/collections/all">Sale</a></li>
-        <li class="nav-item"><a href="/pages/contact">Contact</a></li>
+            </li>
+          {%- else -%}
+            <li class="nav-item">
+              <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
       </ul>
     </nav>
 
@@ -137,39 +90,28 @@
     </div>
   </div>
 
-  <!-- Mobile Navigation Drawer -->
+  <!-- Mobile Navigation Drawer — reads from same Shopify menu -->
   <div id="MobileNav" class="mobile-nav" aria-hidden="true">
     <ul class="mobile-nav__list">
-      <li class="mobile-nav__item">
-        <a href="/collections/all" class="mobile-nav__link">Boats</a>
-        <ul class="mobile-nav__sublist">
-          <li><a href="/collections/all" class="mobile-nav__sublink">Tigé Boats</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">ATX Surf Boats</a></li>
-          <li><a href="/pages/contact" class="mobile-nav__sublink">Schedule a Sea Trial</a></li>
-        </ul>
-      </li>
-      <li class="mobile-nav__item">
-        <a href="/collections/all" class="mobile-nav__link">Gear</a>
-        <ul class="mobile-nav__sublist">
-          <li><a href="/collections/all" class="mobile-nav__sublink">Wakeboards & Bindings</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">Wakesurfers</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">Life Vests</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">Tubes & Towables</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">Ropes & Handles</a></li>
-        </ul>
-      </li>
-      <li class="mobile-nav__item">
-        <a href="/collections" class="mobile-nav__link">Brands</a>
-        <ul class="mobile-nav__sublist">
-          <li><a href="/collections/all" class="mobile-nav__sublink">Tigé</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">ATX</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">Hyperlite</a></li>
-          <li><a href="/collections/all" class="mobile-nav__sublink">HO Sports</a></li>
-        </ul>
-      </li>
-      <li class="mobile-nav__item"><a href="/collections/all" class="mobile-nav__link">Apparel</a></li>
-      <li class="mobile-nav__item"><a href="/collections/all" class="mobile-nav__link">Sale</a></li>
-      <li class="mobile-nav__item"><a href="/pages/contact" class="mobile-nav__link">Contact</a></li>
+      {%- for link in main_menu.links -%}
+        <li class="mobile-nav__item">
+          <a href="{{ link.url }}" class="mobile-nav__link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+          {%- if link.links.size > 0 -%}
+            <ul class="mobile-nav__sublist">
+              {%- for child_link in link.links -%}
+                {%- if child_link.links.size > 0 -%}
+                  <li class="mobile-nav__subheading">{{ child_link.title }}</li>
+                  {%- for grandchild_link in child_link.links -%}
+                    <li><a href="{{ grandchild_link.url }}" class="mobile-nav__sublink">{{ grandchild_link.title }}</a></li>
+                  {%- endfor -%}
+                {%- else -%}
+                  <li><a href="{{ child_link.url }}" class="mobile-nav__sublink">{{ child_link.title }}</a></li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
     </ul>
     <div class="mobile-nav__footer">
       <a href="https://wa.me/97451835555" class="mobile-nav__wa">WhatsApp: +974 5183 5555</a>
@@ -220,11 +162,17 @@
     transition: color 0.15s ease;
   }
   .nav-mega a:hover { color: var(--vz-accent); }
+  .nav-mega__direct-link {
+    font-size: 15px;
+    font-weight: 500;
+    display: block;
+    padding: 4px 0;
+  }
 
   /* Account icon */
   .header-account { display: flex; align-items: center; }
 
-  /* Mobile nav footer */
+  /* Mobile nav */
   .mobile-nav__footer {
     padding: 20px 24px;
     border-top: 1px solid var(--vz-border);
@@ -244,6 +192,15 @@
     font-size: 15px;
     color: var(--vz-gray);
   }
+  .mobile-nav__subheading {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--vz-gray);
+    padding: 12px 0 4px;
+    list-style: none;
+  }
 
   @media (max-width: 989px) {
     .nav-mega { display: none !important; }
@@ -255,7 +212,7 @@
   "name": "Header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "link_list", "id": "menu", "label": "Fallback menu", "default": "main-menu" }
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
   ]
 }
 {% endschema %}
