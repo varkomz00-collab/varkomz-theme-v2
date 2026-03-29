@@ -1,3 +1,4 @@
+{% render 'breadcrumbs' %}
 <div class="product-page page-width" data-section-id="{{ section.id }}">
   <div class="product-grid">
     <div class="product-media">
@@ -79,6 +80,25 @@
     </div>
   </div>
 </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": {{ product.featured_image | image_url: width: 1200 | prepend: "https:" | json }},
+  "description": {{ product.description | strip_html | truncate: 5000 | json }},
+  {% if product.vendor != blank %}"brand": { "@type": "Brand", "name": {{ product.vendor | json }} },{% endif %}
+  "sku": {{ product.selected_or_first_available_variant.sku | default: "" | json }},
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ shop.url }}{{ product.url }}",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": "{{ product.price | money_without_currency | strip_html }}",
+    "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}"
+  }
+}
+</script>
 
 {% schema %}
 {

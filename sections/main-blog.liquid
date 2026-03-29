@@ -1,3 +1,5 @@
+{% render 'breadcrumbs' %}
+{%- paginate blog.articles by 12 -%}
 <div class="blog-page page-width">
   <h1>{{ blog.title }}</h1>
   <div class="blog-grid">
@@ -5,7 +7,7 @@
       <article class="blog-card">
         {% if article.image %}
           <a href="{{ article.url }}">
-            <img src="{{ article.image | image_url: width: 600 }}" alt="{{ article.image.alt | escape }}" loading="lazy">
+            <img src="{{ article.image | image_url: width: 600 }}" alt="{{ article.image.alt | default: article.title | escape }}" loading="lazy">
           </a>
         {% endif %}
         <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
@@ -17,7 +19,14 @@
       </article>
     {% endfor %}
   </div>
+
+  {% if paginate.pages > 1 %}
+    <nav class="pagination" role="navigation" aria-label="Pagination">
+      {{ paginate | default_pagination }}
+    </nav>
+  {% endif %}
 </div>
+{%- endpaginate -%}
 
 {% schema %}
 {

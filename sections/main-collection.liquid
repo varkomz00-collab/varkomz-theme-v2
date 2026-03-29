@@ -1,4 +1,5 @@
 {%- paginate collection.products by section.settings.products_per_page -%}
+{% render 'breadcrumbs' %}
 <div class="collection-page page-width" data-section-id="{{ section.id }}">
   <h1 class="collection-title">{{ collection.title }}</h1>
 

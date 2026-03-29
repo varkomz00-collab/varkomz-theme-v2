@@ -1,3 +1,4 @@
+{% render 'breadcrumbs' %}
 <article class="article-page page-width">
   <h1>{{ article.title }}</h1>
   <div class="article-meta">
@@ -5,7 +6,7 @@
     <span>by {{ article.author }}</span>
   </div>
   {% if article.image %}
-    <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.image.alt | escape }}" class="article-hero" loading="eager">
+    <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.image.alt | default: article.title | escape }}" class="article-hero" loading="eager">
   {% endif %}
   <div class="article-content rte">
     {{ article.content }}
@@ -14,6 +15,22 @@
     <a href="{{ blog.url }}" class="btn btn-secondary">&larr; Back to {{ blog.title }}</a>
   </div>
 </article>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ article.title | json }},
+  "author": { "@type": "Person", "name": {{ article.author | json }} },
+  "datePublished": "{{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+  "dateModified": "{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+  {% if article.image %}"image": {{ article.image | image_url: width: 1200 | prepend: "https:" | json }},{% endif %}
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ shop.name | json }}
+  }
+}
+</script>
 
 {% schema %}
 {

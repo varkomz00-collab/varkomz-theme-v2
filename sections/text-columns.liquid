@@ -67,15 +67,15 @@
   }
 
   #text-columns-{{ section.id }} .text-columns__card {
-    background: #f5f5f7;
-    border-radius: 14px;
+    background: var(--vz-light-gray);
+    border-radius: var(--vz-radius);
     padding: 32px 28px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--vz-transition), box-shadow var(--vz-transition);
   }
 
   #text-columns-{{ section.id }} .text-columns__card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--vz-shadow-lg);
   }
 
   #text-columns-{{ section.id }} .text-columns__card-link {
@@ -105,7 +105,7 @@
   #text-columns-{{ section.id }} .text-columns__card-text {
     font-size: 15px;
     line-height: 1.6;
-    color: #6e6e73;
+    color: var(--vz-gray);
     margin: 0;
   }
 
