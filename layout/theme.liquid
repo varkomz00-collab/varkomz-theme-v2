@@ -61,9 +61,6 @@
 
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   {%- if settings.favicon != blank -%}
     <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png">
@@ -76,6 +73,8 @@
   {%- comment -%}Wire theme settings to CSS custom properties (guarded){%- endcomment -%}
   {% style %}
     :root {
+      {%- if settings.font_heading %}--font-heading: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};{% endif %}
+      {%- if settings.font_body %}--font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};{% endif %}
       {%- if settings.color_primary and settings.color_primary != blank %}--color-primary: {{ settings.color_primary }};{% endif %}
       {%- if settings.color_secondary and settings.color_secondary != blank %}--color-secondary: {{ settings.color_secondary }};{% endif %}
       {%- if settings.color_accent and settings.color_accent != blank %}--color-accent: {{ settings.color_accent }};{% endif %}
@@ -84,8 +83,20 @@
     }
   {% endstyle %}
 
-  {%- if settings.font_heading -%}{{ settings.font_heading | font_face }}{%- endif -%}
-  {%- if settings.font_body -%}{{ settings.font_body | font_face }}{%- endif -%}
+  {%- if settings.font_heading -%}
+    {%- assign heading_font_bold = settings.font_heading | font_modify: 'weight', 'bold' -%}
+    {%- assign heading_font_normal = settings.font_heading | font_modify: 'weight', '400' -%}
+    {{ settings.font_heading | font_face: font_display: 'swap' }}
+    {{ heading_font_bold | font_face: font_display: 'swap' }}
+    {{ heading_font_normal | font_face: font_display: 'swap' }}
+  {%- endif -%}
+  {%- if settings.font_body -%}
+    {%- assign body_font_bold = settings.font_body | font_modify: 'weight', 'bold' -%}
+    {%- assign body_font_light = settings.font_body | font_modify: 'weight', '300' -%}
+    {{ settings.font_body | font_face: font_display: 'swap' }}
+    {{ body_font_bold | font_face: font_display: 'swap' }}
+    {{ body_font_light | font_face: font_display: 'swap' }}
+  {%- endif -%}
 
   <script>
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');

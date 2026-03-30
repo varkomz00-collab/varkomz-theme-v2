@@ -1,9 +1,11 @@
 {
   "current": {
-    "color_primary": "#1a1a1a",
-    "color_secondary": "#f5f5f5",
-    "color_accent": "#0066cc",
+    "color_primary": "#1d1d1f",
+    "color_secondary": "#6e6e73",
+    "color_accent": "#0071e3",
     "color_background": "#ffffff",
-    "color_text": "#1a1a1a"
+    "color_text": "#1d1d1f",
+    "font_heading": "jost_n6",
+    "font_body": "jost_n4"
   }
 }
