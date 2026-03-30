@@ -15,6 +15,21 @@
     "color_background": "#ffffff",
     "color_text": "#1d1d1f",
     "font_heading": "jost_n6",
-    "font_body": "jost_n4"
+    "font_body": "jost_n4",
+    "sections": {
+      "newsletter-popup": {
+        "type": "newsletter-popup",
+        "settings": {
+          "title": "Get 10% Off Your First Order",
+          "text": "Join 500+ Gulf riders. Get early access to new drops, exclusive deals, and riding content.",
+          "placeholder": "Enter your email",
+          "button_label": "Get 10% Off",
+          "disclaimer": "One email per week. Unsubscribe anytime. No spam, ever.",
+          "delay": 60,
+          "exit_intent": true
+        }
+      }
+    },
+    "content_for_index": []
   }
 }
