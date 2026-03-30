@@ -3,7 +3,7 @@
 
   {% if cart.item_count == 0 %}
     <p class="cart-empty">{{ 'cart.empty' | t }}</p>
-    <a href="/collections/all" class="btn btn-primary">{{ 'general.continue_shopping' | t }}</a>
+    <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary">{{ 'general.continue_shopping' | t }}</a>
   {% else %}
     {% form 'cart', cart %}
       <table class="cart-table">

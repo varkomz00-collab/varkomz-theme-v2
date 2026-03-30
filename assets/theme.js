@@ -278,6 +278,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(cart) {
           renderCartItems(cart);
           updateCartCount(cart.item_count);
+        })
+        .catch(function(err) {
+          console.error('Cart update failed:', err);
         });
     }
 
@@ -564,6 +567,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Trigger cart drawer open
             var cartLink = document.querySelector('.header-cart');
             if (cartLink) cartLink.click();
+          })
+          .catch(function(err) {
+            console.error('Sticky ATC failed:', err);
           });
       });
     }

@@ -1,3 +1,4 @@
+{%- if section.settings.show_popup -%}
 <div id="NewsletterPopup" class="newsletter-popup" data-delay="{{ section.settings.delay | times: 1000 }}" data-exit-intent="{{ section.settings.exit_intent }}">
   <div class="newsletter-popup-overlay"></div>
   <div class="newsletter-popup-modal">
@@ -33,6 +34,7 @@
     {% endif %}
   </div>
 </div>
+{%- endif -%}
 
 <style>
   .newsletter-popup {
@@ -139,6 +141,7 @@
 {
   "name": "Newsletter Popup",
   "settings": [
+    { "type": "checkbox", "id": "show_popup", "label": "Enable popup", "default": true },
     { "type": "text", "id": "title", "label": "Title", "default": "Get 10% Off Your First Order" },
     { "type": "textarea", "id": "text", "label": "Description", "default": "Join 500+ Gulf riders. Get early access to new drops, exclusive deals, and riding content." },
     { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Enter your email" },

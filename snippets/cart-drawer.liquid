@@ -13,7 +13,7 @@
       {% for item in cart.items %}
         <div class="cart-drawer-item" data-key="{{ item.key }}">
           {% if item.image %}
-            <img src="{{ item.image | image_url: width: 180 }}" alt="{{ item.title | escape }}" width="72" height="72">
+            <img src="{{ item.image | image_url: width: 180 }}" alt="{{ item.title | escape }}" width="72" height="72" loading="lazy">
           {% endif %}
           <div style="flex:1">
             <p style="font-weight:600;margin:0 0 4px">{{ item.product.title | escape }}</p>

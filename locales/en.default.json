@@ -4,7 +4,11 @@
     "search": "Search",
     "cart": "Cart",
     "menu": "Menu",
-    "close": "Close"
+    "close": "Close",
+    "collections": "Collections",
+    "page_not_found": "Page not found",
+    "404_title": "Page not found",
+    "404_message": "The page you were looking for does not exist."
   },
   "products": {
     "add_to_cart": "Add to cart",
